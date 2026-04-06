@@ -1,764 +1,1467 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مختبر الكشف عن الشقوق</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0b0e14;--card:#11151c;--border:#1e2430;--white:#ffffff;--muted:#94a3b8;--accent:#3b82f6;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);font-family:'Cairo',sans-serif;color:var(--white);min-height:100vh;overflow-x:hidden;text-shadow: 0 0 8px rgba(255,255,255,0.2);}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مختبر الكشف عن الشقوق</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --card: #11151c;
+            --border: #1e2430;
+            --white: #ffffff;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+        }
 
-.header{text-align:center;padding:26px 16px 6px;position:relative;z-index:2;}
-.header h1{font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,#ffffff,#93c5fd,#ffffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter: drop-shadow(0 0 10px rgba(255,255,255,0.4));}
-.header p{color:var(--muted);font-size:0.76rem;margin-top:3px;}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-/* SECTION SELECTOR */
-.section-selector{max-width:920px;margin:16px auto;padding:0 16px;position:relative;z-index:2;display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;justify-content:center;}
-.section-btn{background:#11151c;border:1.5px solid #1e2430;border-radius:10px;padding:14px 12px;font-family:'Cairo',sans-serif;font-size:0.88rem;font-weight:700;color:#94a3b8;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;}
-.section-btn:hover{border-color:#3b82f6;color:#e2e8f0;background:#151a24;}
-.section-btn.active{background:#11151c;border-color:#3b82f6;color:#fff;box-shadow:0 0 15px rgba(59,130,246,0.35);}
-.section-btn span{font-size:0.75rem;opacity:0.8;font-weight:600;}
+        body {
+            background: var(--bg);
+            font-family: 'Cairo', sans-serif;
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-/* SALT PANEL */
-.salt-panel{max-width:920px;margin:20px auto;padding:0 16px;position:relative;z-index:2;}
-.salt-panel h3{font-size:0.85rem;color:#94a3b8;margin-bottom:12px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;}
-.salt-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
-.salt-btn{background:#11151c;border:1.5px solid #1e2430;border-radius:8px;padding:8px 18px;font-family:'Cairo',sans-serif;font-size:0.85rem;font-weight:700;color:#94a3b8;cursor:pointer;transition:all .18s;min-width:90px;}
-.salt-btn:hover{border-color:#3b82f6;color:#fff;background:#151a24;}
-.salt-btn.active{background:#11151c;border-color:#3b82f6;color:#fff;box-shadow:0 0 12px rgba(59,130,246,0.25);}
-.random-btn{border-color:#4c1d95!important;color:#c4b5fd!important;}
-.random-btn:hover{background:#1e1b4b!important;border-color:#8b5cf6!important;}
-.random-btn.active{background:#1e1b4b!important;border-color:#8b5cf6!important;box-shadow:0 0 14px rgba(139,92,246,0.3)!important;}
+        .header {
+            text-align: center;
+            padding: 26px 16px 6px;
+            position: relative;
+            z-index: 2;
+        }
 
-/* MAIN LAYOUT */
-.main-wrap{max-width:920px;margin:0 auto;padding:0 16px;position:relative;z-index:2;display:grid;grid-template-columns:260px 1fr;gap:20px;}
-@media(max-width:768px){.main-wrap{grid-template-columns:1fr;}}
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff, #93c5fd, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-/* REAGENTS */
-.reagents-panel{background:#11151c;border:1px solid #1e2430;border-radius:12px;padding:18px 16px;}
-.reagents-panel h4{font-size:0.82rem;font-weight:800;color:#94a3b8;margin-bottom:16px;text-align:right;display:flex;align-items:center;gap:8px;}
-.reagent-grid{display:flex;flex-direction:column;gap:8px;}
-.reag-btn{background:#0b0e14;border:1.5px solid #1e2430;border-radius:8px;padding:10px 14px;font-family:'Cairo',sans-serif;font-size:0.82rem;font-weight:700;color:#94a3b8;cursor:pointer;transition:all .18s;text-align:right;display:flex;align-items:center;justify-content:space-between;}
-.reag-btn:hover{border-color:#3b82f6;color:#fff;background:#0f172a;}
-.reag-btn.used{opacity:.4;border-style:dashed;pointer-events:none;}
-.reag-icon{font-size:0.9rem;color:#3b82f6;}
+        .header p {
+            color: var(--muted);
+            font-size: 0.76rem;
+            margin-top: 3px;
+        }
 
-/* BENCH */
-.bench{background:#000000;border:1px solid #334155;border-radius:12px;padding:30px 20px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;box-shadow: inset 0 0 20px rgba(0,0,0,1);}
+        .section-selector {
+            max-width: 920px;
+            margin: 16px auto;
+            padding: 0 16px;
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            justify-content: center;
+        }
 
-/* SCENE */
-.scene{display:flex;align-items:flex-end;justify-content:center;gap:40px;width:100%;}
-.tube-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;}
-.tube-container{position:relative;width:74px;height:170px;z-index:5;}
-.tube-svg{width:100%;height:100%;position:relative;z-index:10;pointer-events:none;}
-.tube-liquid{position:absolute;bottom:8px;left:10px;right:10px;border-radius:0 0 18px 18px;transition:background-color 1s ease, height .5s ease;overflow:hidden;z-index:6;}
-.precipitate{position:absolute;bottom:8px;left:10px;right:10px;border-radius:0 0 18px 18px;height:0;transition:height .8s ease, background .5s;overflow:hidden;z-index:7;}
-.bubble-container{position:absolute;bottom:8px;left:10px;right:10px;height:calc(100% - 16px);overflow:hidden;pointer-events:none;border-radius:0 0 18px 18px;z-index:8;}
-.bubble{position:absolute;border-radius:50%;animation:rise linear infinite;opacity:0;}
-@keyframes rise{0%{bottom:0;opacity:.75;transform:scale(1);}80%{opacity:.4;}100%{bottom:100%;opacity:0;transform:scale(1.5);}}
-.fumes{position:absolute;top:-35px;left:50%;transform:translateX(-50%);pointer-events:none;opacity:0;transition:opacity .3s;display:flex;gap:4px;z-index:15;}
-.fumes.show{opacity:1;}
-.fume-puff{border-radius:50%;background:rgba(200,220,255,0.15);animation:puffUp 1.4s ease infinite;}
-@keyframes puffUp{0%{transform:scale(1) translateY(0);opacity:.7;}50%{transform:scale(1.3) translateY(-7px);opacity:.35;}100%{transform:scale(1.6) translateY(-14px);opacity:0;}}
+        .section-btn {
+            background: #11151c;
+            border: 1.5px solid #1e2430;
+            border-radius: 10px;
+            padding: 14px 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all .2s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
 
-.tube-label{font-size:0.9rem;font-weight:700;color:#ffffff;text-align:center;margin-top:5px;text-shadow: 0 0 5px rgba(255,255,255,0.5);}
+        .section-btn:hover {
+            border-color: #3b82f6;
+            color: #e2e8f0;
+            background: #151a24;
+        }
 
-/* K2Cr2O7 - Updated to Horizontal */
-.cr-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.28;transition:opacity .4s;margin-bottom:10px;}
-.cr-strip{width:60px;height:18px;border-radius:4px;background:#f97316;border:1.5px solid #7c2d12;transition:background 1.2s ease;}
-.cr-label{font-size:0.9rem;font-weight:800;color:#94a3b8;letter-spacing:0.5px;}
+        .section-btn.active {
+            background: #11151c;
+            border-color: #3b82f6;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.35);
+        }
 
-/* OBS */
-.obs-wrap{max-width:920px;margin:20px auto 0;padding:0 16px;position:relative;z-index:2;}
-.obs-box{background:#0b0e14;border:1.5px solid #1e2430;border-radius:12px;padding:16px 20px;min-height:80px;}
-.obs-title{font-size:0.75rem;font-weight:800;color:#475569;letter-spacing:1px;margin-bottom:10px;text-transform:uppercase;}
-.obs-text{font-size:0.9rem;font-weight:600;line-height:1.7;color:#ffffff;}
-.obs-entry{margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #1e2430;animation:fadeSlide .4s ease;}
-.obs-entry:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-@keyframes fadeSlide{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+        .section-btn span {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            font-weight: 600;
+        }
 
-/* FINAL BOX */
-.final-box{max-width:920px;margin:15px auto;padding:0 16px;position:relative;z-index:2;display:none;}
-.final-box.show{display:block;}
-.final-inner{border-radius:12px;padding:20px;text-align:center;border:2px solid;animation:fadeIn .5s ease;}
-.fi-co3{background:rgba(34,197,94,0.1);border-color:#22c55e;}
-.fi-hco3{background:rgba(56,189,248,0.1);border-color:#38bdf8;}
-.fi-so3{background:rgba(168,85,247,0.1);border-color:#a855f7;}
-.fi-s2o3{background:rgba(249,115,22,0.1);border-color:#f97316;}
-.fi-cl{background:rgba(234,179,8,0.1);border-color:#eab308;}
-.fi-so4{background:rgba(96,165,250,0.1);border-color:#60a5fa;}
-.fi-po4{background:rgba(248,113,113,0.1);border-color:#f87171;}
-.fi-pb{background:rgba(234,179,8,0.1);border-color:#eab308;}
-.fi-cu{background:rgba(96,165,250,0.1);border-color:#60a5fa;}
-.fi-cd{background:rgba(234,179,8,0.1);border-color:#eab308;}
-.fi-al{background:rgba(34,197,94,0.1);border-color:#22c55e;}
-.fi-fe2{background:rgba(56,189,248,0.1);border-color:#38bdf8;}
-.fi-fe3{background:rgba(168,85,247,0.1);border-color:#a855f7;}
-.fi-ni{background:rgba(56,189,248,0.1);border-color:#38bdf8;}
-.fi-mn{background:rgba(168,85,247,0.1);border-color:#a855f7;}
-.fi-ba{background:rgba(234,179,8,0.1);border-color:#eab308;}
-.fi-ca{background:rgba(34,197,94,0.1);border-color:#22c55e;}
-.fi-k{background:rgba(168,85,247,0.1);border-color:#a855f7;}
-.fi-na{background:rgba(96,165,250,0.1);border-color:#60a5fa;}
+        .salt-panel {
+            max-width: 920px;
+            margin: 20px auto;
+            padding: 0 16px;
+            position: relative;
+            z-index: 2;
+        }
 
-.fi-icon{font-size:2.2rem;display:block;margin-bottom:6px;}
-.fi-name{font-size:1.2rem;font-weight:900;color:#ffffff;}
-.fi-formula{font-size:0.86rem;font-weight:700;opacity:.7;margin-top:3px;color:#ffffff;}
-.fi-eq{font-size:0.72rem;opacity:.45;margin-top:8px;font-family:'Space Mono',monospace;direction:ltr;color:#ffffff;}
+        .salt-panel h3 {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
 
-/* BOTTOM BAR */
-.bottom-bar{max-width:920px;margin:15px auto 10px;padding:0 16px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:2;}
-.bar-btn{background:#11151c;border:1.5px solid #1e2430;border-radius:10px;padding:10px 22px;font-family:'Cairo',sans-serif;font-size:0.82rem;font-weight:700;color:#94a3b8;cursor:pointer;transition:all .18s;}
-.bar-btn:hover:not(:disabled){border-color:#3b82f6;color:#fff;background:#151a24;}
-.bar-btn:disabled{opacity:.3;cursor:not-allowed;}
-.hint-btn{border-color:rgba(34,197,94,0.3);color:#4ade80;}
-.hint-btn:hover:not(:disabled){border-color:#22c55e!important;color:#fff!important;}
-.guess-btn{border-color:rgba(139,92,246,0.3);color:#a78bfa;}
-.guess-btn:hover:not(:disabled){border-color:#8b5cf6!important;color:#fff!important;}
+        .salt-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
 
-/* LOG */
-.log-wrap{max-width:920px;margin:0 auto 40px;padding:0 16px;position:relative;z-index:2;}
-.log-box{background:#060709;border:1px solid #131720;border-radius:10px;padding:12px 16px;font-family:'Space Mono',monospace;font-size:0.7rem;color:#475569;max-height:100px;overflow-y:auto;}
-.log-line{margin-bottom:4px;}
-.log-line .ts{color:#1e4d2e;}
-.log-line .good{color:#22c55e;}
+        .salt-btn {
+            background: #11151c;
+            border: 1.5px solid #1e2430;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all .18s;
+            min-width: 90px;
+        }
 
-/* MODAL */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-.overlay.show{display:flex;}
-.modal{background:#11151c;border:1.5px solid #1e2430;border-radius:18px;padding:30px;max-width:450px;width:90%;animation:fadeIn .3s ease;}
-@keyframes fadeIn{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
-.modal h3{font-size:1.1rem;font-weight:900;text-align:center;margin-bottom:20px;color:#c4b5fd;}
-.guess-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-height: 400px;overflow-y: auto;padding-right: 5px;}
-.guess-grid::-webkit-scrollbar{width:6px;}
-.guess-grid::-webkit-scrollbar-thumb{background:#1e2430;border-radius:10px;}
-.guess-grid::-webkit-scrollbar-thumb:hover{background:#3b82f6;}
-.guess-opt{background:#0b0e14;border:1.5px solid #1e2430;border-radius:10px;padding:12px;font-family:'Cairo',sans-serif;font-size:0.85rem;font-weight:700;color:#94a3b8;cursor:pointer;transition:all .18s;text-align:right;}
-.guess-opt:hover{border-color:#8b5cf6;color:#fff;}
-.guess-opt.correct{background:rgba(34,197,94,0.2);border-color:#22c55e;color:#86efac;pointer-events:none;}
-.guess-opt.wrong{background:rgba(239,68,68,0.2);border-color:#ef4444;color:#fca5a5;pointer-events:none;}
-.modal-close{display:block;margin:20px auto 0;background:transparent;border:1px solid #1e2430;border-radius:10px;padding:8px 25px;font-family:'Cairo',sans-serif;font-size:0.8rem;font-weight:700;color:#475569;cursor:pointer;transition:all .18s;}
-.modal-close:hover{border-color:#3b82f6;color:#fff;}
-.guess-result{text-align:center;font-size:0.95rem;font-weight:800;margin-top:15px;min-height:30px;}
-</style>
+        .salt-btn:hover {
+            border-color: #3b82f6;
+            color: #fff;
+            background: #151a24;
+        }
+
+        .salt-btn.active {
+            background: #11151c;
+            border-color: #3b82f6;
+            color: #fff;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .random-btn {
+            border-color: #4c1d95 !important;
+            color: #c4b5fd !important;
+        }
+
+        .random-btn:hover {
+            background: #1e1b4b !important;
+            border-color: #8b5cf6 !important;
+        }
+
+        .random-btn.active {
+            background: #1e1b4b !important;
+            border-color: #8b5cf6 !important;
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.3) !important;
+        }
+
+        .main-wrap {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 0 16px;
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 20px;
+        }
+
+        @media(max-width:768px) {
+            .main-wrap {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .reagents-panel {
+            background: #11151c;
+            border: 1px solid #1e2430;
+            border-radius: 12px;
+            padding: 18px 16px;
+        }
+
+        .reagents-panel h4 {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #94a3b8;
+            margin-bottom: 16px;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reagent-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .reag-btn {
+            background: #0b0e14;
+            border: 1.5px solid #1e2430;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all .18s;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .reag-btn:hover {
+            border-color: #3b82f6;
+            color: #fff;
+            background: #0f172a;
+        }
+
+        .reag-btn.used {
+            opacity: .4;
+            border-style: dashed;
+            pointer-events: none;
+        }
+
+        .reag-icon {
+            font-size: 0.9rem;
+            color: #3b82f6;
+        }
+
+        .bench {
+            background: #000000;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 30px 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 320px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 1);
+        }
+
+        .scene {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .tube-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tube-container {
+            position: relative;
+            width: 74px;
+            height: 170px;
+            z-index: 5;
+        }
+
+        .tube-svg {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .tube-liquid {
+            position: absolute;
+            bottom: 8px;
+            left: 10px;
+            right: 10px;
+            border-radius: 0 0 18px 18px;
+            transition: background-color 1s ease, height .5s ease;
+            overflow: hidden;
+            z-index: 6;
+        }
+
+        .precipitate {
+            position: absolute;
+            bottom: 8px;
+            left: 10px;
+            right: 10px;
+            border-radius: 0 0 18px 18px;
+            height: 0;
+            transition: height .8s ease, background .5s;
+            overflow: hidden;
+            z-index: 7;
+        }
+
+        .bubble-container {
+            position: absolute;
+            bottom: 8px;
+            left: 10px;
+            right: 10px;
+            height: calc(100% - 16px);
+            overflow: hidden;
+            pointer-events: none;
+            border-radius: 0 0 18px 18px;
+            z-index: 8;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            animation: rise linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: 0;
+                opacity: .75;
+                transform: scale(1);
+            }
+
+            80% {
+                opacity: .4;
+            }
+
+            100% {
+                bottom: 100%;
+                opacity: 0;
+                transform: scale(1.5);
+            }
+        }
+
+        .fumes {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .3s;
+            display: flex;
+            gap: 4px;
+            z-index: 15;
+        }
+
+        .fumes.show {
+            opacity: 1;
+        }
+
+        .fume-puff {
+            border-radius: 50%;
+            background: rgba(200, 220, 255, 0.15);
+            animation: puffUp 1.4s ease infinite;
+        }
+
+        @keyframes puffUp {
+            0% {
+                transform: scale(1) translateY(0);
+                opacity: .7;
+            }
+
+            50% {
+                transform: scale(1.3) translateY(-7px);
+                opacity: .35;
+            }
+
+            100% {
+                transform: scale(1.6) translateY(-14px);
+                opacity: 0;
+            }
+        }
+
+        .tube-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .cr-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: .28;
+            transition: opacity .4s;
+            margin-bottom: 10px;
+        }
+
+        .cr-strip {
+            width: 60px;
+            height: 18px;
+            border-radius: 4px;
+            background: #f97316;
+            border: 1.5px solid #7c2d12;
+            transition: background 1.2s ease;
+        }
+
+        .cr-label {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+        }
+
+        .obs-wrap {
+            max-width: 920px;
+            margin: 20px auto 0;
+            padding: 0 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .obs-box {
+            background: #0b0e14;
+            border: 1.5px solid #1e2430;
+            border-radius: 12px;
+            padding: 16px 20px;
+            min-height: 80px;
+        }
+
+        .obs-title {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #475569;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .obs-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #ffffff;
+        }
+
+        .obs-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1e2430;
+            animation: fadeSlide .4s ease;
+        }
+
+        .obs-entry:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .final-box {
+            max-width: 920px;
+            margin: 15px auto;
+            padding: 0 16px;
+            position: relative;
+            z-index: 2;
+            display: none;
+        }
+
+        .final-box.show {
+            display: block;
+        }
+
+        .final-inner {
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid;
+            animation: fadeIn .5s ease;
+        }
+
+        .fi-co3 {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: #22c55e;
+        }
+
+        .fi-hco3 {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: #38bdf8;
+        }
+
+        .fi-so3 {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: #a855f7;
+        }
+
+        .fi-s2o3 {
+            background: rgba(249, 115, 22, 0.1);
+            border-color: #f97316;
+        }
+
+        .fi-cl {
+            background: rgba(234, 179, 8, 0.1);
+            border-color: #eab308;
+        }
+
+        .fi-so4 {
+            background: rgba(96, 165, 250, 0.1);
+            border-color: #60a5fa;
+        }
+
+        .fi-po4 {
+            background: rgba(248, 113, 113, 0.1);
+            border-color: #f87171;
+        }
+
+        .fi-pb {
+            background: rgba(234, 179, 8, 0.1);
+            border-color: #eab308;
+        }
+
+        .fi-cu {
+            background: rgba(96, 165, 250, 0.1);
+            border-color: #60a5fa;
+        }
+
+        .fi-cd {
+            background: rgba(234, 179, 8, 0.1);
+            border-color: #eab308;
+        }
+
+        .fi-al {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: #22c55e;
+        }
+
+        .fi-fe2 {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: #38bdf8;
+        }
+
+        .fi-fe3 {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: #a855f7;
+        }
+
+        .fi-ni {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: #38bdf8;
+        }
+
+        .fi-mn {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: #a855f7;
+        }
+
+        .fi-ba {
+            background: rgba(234, 179, 8, 0.1);
+            border-color: #eab308;
+        }
+
+        .fi-ca {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: #22c55e;
+        }
+
+        .fi-k {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: #a855f7;
+        }
+
+        .fi-na {
+            background: rgba(96, 165, 250, 0.1);
+            border-color: #60a5fa;
+        }
+
+        .fi-icon {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .fi-name {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #ffffff;
+        }
+
+        .fi-formula {
+            font-size: 0.86rem;
+            font-weight: 700;
+            opacity: .7;
+            margin-top: 3px;
+            color: #ffffff;
+        }
+
+        .fi-eq {
+            font-size: 0.72rem;
+            opacity: .45;
+            margin-top: 8px;
+            font-family: 'Space Mono', monospace;
+            direction: ltr;
+            color: #ffffff;
+        }
+
+        .bottom-bar {
+            max-width: 920px;
+            margin: 15px auto 10px;
+            padding: 0 16px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .bar-btn {
+            background: #11151c;
+            border: 1.5px solid #1e2430;
+            border-radius: 10px;
+            padding: 10px 22px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all .18s;
+        }
+
+        .bar-btn:hover:not(:disabled) {
+            border-color: #3b82f6;
+            color: #fff;
+            background: #151a24;
+        }
+
+        .bar-btn:disabled {
+            opacity: .3;
+            cursor: not-allowed;
+        }
+
+        .hint-btn {
+            border-color: rgba(34, 197, 94, 0.3);
+            color: #4ade80;
+        }
+
+        .hint-btn:hover:not(:disabled) {
+            border-color: #22c55e !important;
+            color: #fff !important;
+        }
+
+        .guess-btn {
+            border-color: rgba(139, 92, 246, 0.3);
+            color: #a78bfa;
+        }
+
+        .guess-btn:hover:not(:disabled) {
+            border-color: #8b5cf6 !important;
+            color: #fff !important;
+        }
+
+        .log-wrap {
+            max-width: 920px;
+            margin: 0 auto 40px;
+            padding: 0 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .log-box {
+            background: #060709;
+            border: 1px solid #131720;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: #475569;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .log-line {
+            margin-bottom: 4px;
+        }
+
+        .log-line .ts {
+            color: #1e4d2e;
+        }
+
+        .log-line .good {
+            color: #22c55e;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: #11151c;
+            border: 1.5px solid #1e2430;
+            border-radius: 18px;
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            animation: fadeIn .3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal h3 {
+            font-size: 1.1rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #c4b5fd;
+        }
+
+        .guess-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .guess-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .guess-grid::-webkit-scrollbar-thumb {
+            background: #1e2430;
+            border-radius: 10px;
+        }
+
+        .guess-grid::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6;
+        }
+
+        .guess-opt {
+            background: #0b0e14;
+            border: 1.5px solid #1e2430;
+            border-radius: 10px;
+            padding: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all .18s;
+            text-align: right;
+        }
+
+        .guess-opt:hover {
+            border-color: #8b5cf6;
+            color: #fff;
+        }
+
+        .guess-opt.correct {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: #22c55e;
+            color: #86efac;
+            pointer-events: none;
+        }
+
+        .guess-opt.wrong {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #fca5a5;
+            pointer-events: none;
+        }
+
+        .modal-close {
+            display: block;
+            margin: 20px auto 0;
+            background: transparent;
+            border: 1px solid #1e2430;
+            border-radius: 10px;
+            padding: 8px 25px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #475569;
+            cursor: pointer;
+            transition: all .18s;
+        }
+
+        .modal-close:hover {
+            border-color: #3b82f6;
+            color: #fff;
+        }
+
+        .guess-result {
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-top: 15px;
+            min-height: 30px;
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="header">
-  <h1>🔬 مختبر الكشف عن الشقوق</h1>
-  <p>تجربة كيميائية تفاعلية للكشف عن الأنيونات والكاتيونات</p>
-</div>
+    <div class="header">
+        <h1>🔬 مختبر الكشف عن الشقوق</h1>
+        <p>تجربة كيميائية تفاعلية للكشف عن الأنيونات والكاتيونات</p>
+    </div>
 
-<!-- SECTION SELECTOR -->
-<div class="section-selector">
-  <button class="section-btn active" onclick="switchSection('anions')">
-    🟢 الكشف عن الشقوق الحامضية
-    <span>(الأنيونات)</span>
-  </button>
-  <button class="section-btn" onclick="switchSection('cations1')">
-    🔵 الكشف عن الشقوق القاعدية
-    <span>(مجموعة 1-3)</span>
-  </button>
-  <button class="section-btn" onclick="switchSection('cations2')">
-    🟣 الكشف عن الشقوق القاعدية
-    <span>(مجموعة 4-6)</span>
-  </button>
-  <button class="section-btn" onclick="switchSection('unknown')">
-    ❓ ملح مجهول المجموعة
-    <span>اختبر معلوماتك</span>
-  </button>
-</div>
+    <div class="section-selector">
+        <button class="section-btn active" onclick="switchSection('anions')">
+            🟢 الكشف عن الشقوق الحامضية
+            <span>(الأنيونات)</span>
+        </button>
+        <button class="section-btn" onclick="switchSection('cations1')">
+            🔵 الكشف عن الشقوق القاعدية
+            <span>(مجموعة 1-3)</span>
+        </button>
+        <button class="section-btn" onclick="switchSection('cations2')">
+            🟣 الكشف عن الشقوق القاعدية
+            <span>(مجموعة 4-6)</span>
+        </button>
+        <button class="section-btn" onclick="switchSection('unknown')">
+            ❓ ملح مجهول المجموعة
+            <span>اختبر معلوماتك</span>
+        </button>
+    </div>
 
-<!-- SALT SELECTOR -->
-<div class="salt-panel" id="saltPanel">
-  <h3>⚗️ اختر ملحًا للتحليل:</h3>
-  <div class="salt-grid" id="saltGrid"></div>
-</div>
+    <div class="salt-panel" id="saltPanel">
+        <h3>⚗️ اختر ملحًا للتحليل:</h3>
+        <div class="salt-grid" id="saltGrid"></div>
+    </div>
 
-<!-- MAIN -->
-<div class="main-wrap">
-  <div class="reagents-panel">
-    <h4>🧪 الكواشف المتاحة</h4>
-    <div class="reagent-grid" id="reagentGrid"></div>
-  </div>
-
-  <div class="bench">
-    <div class="scene">
-      <div class="tube-wrap">
-        <div class="tube-container" id="tc">
-          <svg class="tube-svg" viewBox="0 0 74 170" fill="none">
-            <!-- Glass Tube Body -->
-            <path d="M12 4L12 135Q12 165 37 165Q62 165 62 135L62 4Z" stroke="#ffffff" stroke-width="2.5" fill="rgba(255,255,255,0.05)"/>
-            <!-- Rim -->
-            <rect x="8" y="2" width="58" height="8" rx="4" stroke="#ffffff" stroke-width="2" fill="#1e293b"/>
-            <!-- Reflection highlight -->
-            <path d="M18 12L18 140Q18 155 26 160" stroke="rgba(255,255,255,0.1)" stroke-width="3" stroke-linecap="round"/>
-          </svg>
-          <div class="tube-liquid" id="tl" style="height:0;background:transparent;"></div>
-          <div class="bubble-container" id="bc"></div>
-          <div class="precipitate" id="pl"></div>
-          <div class="fumes" id="fumes">
-            <span class="fume-puff" style="width:18px;height:18px;"></span>
-            <span class="fume-puff" style="width:14px;height:14px;"></span>
-            <span class="fume-puff" style="width:16px;height:16px;"></span>
-          </div>
+    <div class="main-wrap">
+        <div class="reagents-panel">
+            <h4>🧪 الكواشف المتاحة</h4>
+            <div class="reagent-grid" id="reagentGrid"></div>
         </div>
-        <div class="tube-label" id="tlabel">الأنبوبة فارغة</div>
-      </div>
+
+        <div class="bench">
+            <div class="scene">
+                <div class="tube-wrap">
+                    <div class="tube-container" id="tc">
+                        <svg class="tube-svg" viewBox="0 0 74 170" fill="none">
+                            <path d="M12 4L12 135Q12 165 37 165Q62 165 62 135L62 4Z" stroke="#ffffff" stroke-width="2.5"
+                                fill="rgba(255,255,255,0.05)" />
+                            <rect x="8" y="2" width="58" height="8" rx="4" stroke="#ffffff" stroke-width="2"
+                                fill="#1e293b" />
+                            <path d="M18 12L18 140Q18 155 26 160" stroke="rgba(255,255,255,0.1)" stroke-width="3"
+                                stroke-linecap="round" />
+                        </svg>
+                        <div class="tube-liquid" id="tl" style="height:0;background:transparent;"></div>
+                        <div class="bubble-container" id="bc"></div>
+                        <div class="precipitate" id="pl"></div>
+                        <div class="fumes" id="fumes">
+                            <span class="fume-puff" style="width:18px;height:18px;"></span>
+                            <span class="fume-puff" style="width:14px;height:14px;"></span>
+                            <span class="fume-puff" style="width:16px;height:16px;"></span>
+                        </div>
+                    </div>
+                    <div class="tube-label" id="tlabel">الأنبوبة فارغة</div>
+                </div>
+            </div>
+
+            <div class="cr-wrap" id="crWrap" style="margin-top:20px;">
+                <div class="cr-label">K₂Cr₂O₇</div>
+                <div class="cr-strip" id="crStrip"></div>
+            </div>
+        </div>
     </div>
-    
-    <!-- K2Cr2O7 Indicator - Horizontal as requested -->
-    <div class="cr-wrap" id="crWrap" style="margin-top:20px;">
-      <div class="cr-label">K₂Cr₂O₇</div>
-      <div class="cr-strip" id="crStrip"></div>
+
+    <div class="obs-wrap">
+        <div class="obs-box">
+            <div class="obs-title">📋 الملاحظات المخبرية</div>
+            <div id="obsContainer">
+                <div class="obs-text" style="color:#94a3b8;">اختر ملحًا من القائمة بالأعلى لبدء التحليل الكيميائي...
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- OBS -->
-<div class="obs-wrap">
-  <div class="obs-box">
-    <div class="obs-title">📋 الملاحظات المخبرية</div>
-    <div id="obsContainer"><div class="obs-text" style="color:#94a3b8;">اختر ملحًا من القائمة بالأعلى لبدء التحليل الكيميائي...</div></div>
-  </div>
-</div>
+    <div class="final-box" id="finalBox">
+        <div class="final-inner" id="finalInner">
+            <span class="fi-icon" id="fiIcon"></span>
+            <div class="fi-name" id="fiName"></div>
+            <div class="fi-formula" id="fiFormula"></div>
+            <div class="fi-eq" id="fiEq"></div>
+        </div>
+    </div>
 
-<!-- FINAL RESULT -->
-<div class="final-box" id="finalBox">
-  <div class="final-inner" id="finalInner">
-    <span class="fi-icon" id="fiIcon"></span>
-    <div class="fi-name" id="fiName"></div>
-    <div class="fi-formula" id="fiFormula"></div>
-    <div class="fi-eq" id="fiEq"></div>
-  </div>
-</div>
+    <div class="bottom-bar">
+        <button class="bar-btn hint-btn" id="hintBtn" onclick="showHint()" disabled>💡 تلميح</button>
+        <button class="bar-btn guess-btn" id="guessBtn" onclick="openGuess()" disabled>🔮 خمّن الأيون</button>
+        <button class="bar-btn" id="revealBtn" onclick="revealAnswer()" disabled>🔍 اكشف الإجابة</button>
+        <button class="bar-btn" id="clearBtn" onclick="clearTube()" disabled>🧹 تنظيف الأنبوبة</button>
+        <button class="bar-btn" onclick="resetLab()">🔄 تجربة جديدة</button>
+    </div>
 
-<!-- BOTTOM BAR -->
-<div class="bottom-bar">
-  <button class="bar-btn hint-btn"  id="hintBtn"   onclick="showHint()"    disabled>💡 تلميح</button>
-  <button class="bar-btn guess-btn" id="guessBtn"  onclick="openGuess()"   disabled>🔮 خمّن الأيون</button>
-  <button class="bar-btn"           id="revealBtn" onclick="revealAnswer()" disabled>🔍 اكشف الإجابة</button>
-  <button class="bar-btn"           id="clearBtn"  onclick="clearTube()"   disabled>🧹 تنظيف الأنبوبة</button>
-  <button class="bar-btn"           onclick="resetLab()">🔄 تجربة جديدة</button>
-</div>
+    <div class="log-wrap">
+        <div class="log-box" id="logBox">
+            <div class="log-line">// سجل العمليات المخبرية</div>
+        </div>
+    </div>
 
-<!-- LOG -->
-<div class="log-wrap">
-  <div class="log-box" id="logBox"><div class="log-line">// سجل العمليات المخبرية</div></div>
-</div>
+    <div class="overlay" id="overlay" onclick="closeGuess(event)">
+        <div class="modal" id="modal">
+            <h3 id="modalTitle">🔮 ما هو الأيون الموجود؟</h3>
+            <div class="guess-grid" id="guessGrid"></div>
+            <div class="guess-result" id="guessResult"></div>
+            <button class="modal-close" onclick="closeGuessBtn()">إغلاق</button>
+        </div>
+    </div>
 
-<!-- GUESS MODAL -->
-<div class="overlay" id="overlay" onclick="closeGuess(event)">
-  <div class="modal" id="modal">
-    <h3 id="modalTitle">🔮 ما هو الأيون الموجود؟</h3>
-    <div class="guess-grid" id="guessGrid"></div>
-    <div class="guess-result" id="guessResult"></div>
-    <button class="modal-close" onclick="closeGuessBtn()">إغلاق</button>
-  </div>
-</div>
+    <script>
+        const ANIONS = {
+            co3: { name: 'كربونات الصوديوم', formula: 'Na₂CO₃', anion: 'CO₃²⁻', fiCls: 'fi-co3', icon: '🟢', eq: 'Na₂CO₃ + 2HCl → 2NaCl + H₂O + CO₂↑' },
+            hco3: { name: 'بيكربونات الصوديوم', formula: 'NaHCO₃', anion: 'HCO₃⁻', fiCls: 'fi-hco3', icon: '🔵', eq: 'NaHCO₃ + HCl → NaCl + H₂O + CO₂↑' },
+            so3: { name: 'كبريتيت الصوديوم', formula: 'Na₂SO₃', anion: 'SO₃²⁻', fiCls: 'fi-so3', icon: '🟣', eq: 'Na₂SO₃ + 2HCl → 2NaCl + H₂O + SO₂↑' },
+            s2o3: { name: 'ثيوكبريتات الصوديوم', formula: 'Na₂S₂O₃', anion: 'S₂O₃²⁻', fiCls: 'fi-s2o3', icon: '🟠', eq: 'Na₂S₂O₃ + 2HCl → 2NaCl + H₂O + SO₂↑ + S↓' },
+            cl: { name: 'كلوريد الصوديوم (أنيون)', formula: 'NaCl', anion: 'Cl⁻', fiCls: 'fi-cl', icon: '🟡', eq: 'NaCl + H₂SO₄(مركز) → NaHSO₄ + HCl↑' },
+            so4: { name: 'كبريتات الصوديوم', formula: 'Na₂SO₄', anion: 'SO₄²⁻', fiCls: 'fi-so4', icon: '🔵', eq: 'Na₂SO₄ + BaCl₂ → BaSO₄↓ + 2NaCl' },
+            po4: { name: 'فوسفات الصوديوم', formula: 'Na₃PO₄', anion: 'PO₄³⁻', fiCls: 'fi-po4', icon: '🔴', eq: 'Na₃PO₄ + FeCl₃ → FePO₄↓ + 3NaCl' },
+        };
 
-<script>
-// ── DATA ──
-const ANIONS = {
-  co3:  {name:'كربونات الصوديوم',   formula:'Na₂CO₃',  anion:'CO₃²⁻', fiCls:'fi-co3', icon:'🟢', eq:'Na₂CO₃ + 2HCl → 2NaCl + H₂O + CO₂↑'},
-  hco3: {name:'بيكربونات الصوديوم',formula:'NaHCO₃',  anion:'HCO₃⁻', fiCls:'fi-hco3',icon:'🔵', eq:'NaHCO₃ + HCl → NaCl + H₂O + CO₂↑'},
-  so3:  {name:'كبريتيت الصوديوم',  formula:'Na₂SO₃',  anion:'SO₃²⁻', fiCls:'fi-so3', icon:'🟣', eq:'Na₂SO₃ + 2HCl → 2NaCl + H₂O + SO₂↑'},
-  s2o3: {name:'ثيوكبريتات الصوديوم',formula:'Na₂S₂O₃',anion:'S₂O₃²⁻',fiCls:'fi-s2o3',icon:'🟠', eq:'Na₂S₂O₃ + 2HCl → 2NaCl + H₂O + SO₂↑ + S↓'},
-  cl:   {name:'كلوريد الصوديوم (أنيون)',   formula:'NaCl',    anion:'Cl⁻',   fiCls:'fi-cl',  icon:'🟡', eq:'NaCl + H₂SO₄(مركز) → NaHSO₄ + HCl↑'},
-  so4:  {name:'كبريتات الصوديوم',  formula:'Na₂SO₄',  anion:'SO₄²⁻', fiCls:'fi-so4', icon:'🔵', eq:'Na₂SO₄ + BaCl₂ → BaSO₄↓ + 2NaCl'},
-  po4:  {name:'فوسفات الصوديوم',   formula:'Na₃PO₄',  anion:'PO₄³⁻', fiCls:'fi-po4', icon:'🔴', eq:'Na₃PO₄ + FeCl₃ → FePO₄↓ + 3NaCl'},
-};
+        const CATIONS_1_3 = {
+            pb: { name: 'نترات الرصاص', formula: 'Pb(NO₃)₂', cation: 'Pb²⁺', fiCls: 'fi-pb', icon: '🟡', eq: 'Pb²⁺ + K₂CrO₄ → PbCrO₄↓ (أصفر)' },
+            cu: { name: 'كبريتات النحاس', formula: 'CuSO₄', cation: 'Cu²⁺', fiCls: 'fi-cu', icon: '🔵', eq: 'Cu²⁺ + H₂S → CuS↓ (أسود)' },
+            cd: { name: 'كلوريد الكادميوم', formula: 'CdCl₂', cation: 'Cd²⁺', fiCls: 'fi-cd', icon: '🟡', eq: 'Cd²⁺ + H₂S → CdS↓ (أصفر)' },
+            al: { name: 'كلوريد الألومنيوم', formula: 'AlCl₃', cation: 'Al³⁺', fiCls: 'fi-al', icon: '⚪', eq: 'Al³⁺ + NH₃ → Al(OH)₃↓ (أبيض جيلاتيني)' },
+            fe2: { name: 'كبريتات الحديدوز', formula: 'FeSO₄', cation: 'Fe²⁺', fiCls: 'fi-fe2', icon: '🟢', eq: 'Fe²⁺ + NaOH → Fe(OH)₂↓ (أخضر متسخ)' },
+            fe3: { name: 'كلوريد الحديديك', formula: 'FeCl₃', cation: 'Fe³⁺', fiCls: 'fi-fe3', icon: '🟤', eq: 'Fe³⁺ + NaOH → Fe(OH)₃↓ (بني محمر)' },
+        };
 
-const CATIONS_1_3 = {
-  pb:  {name:'نترات الرصاص',      formula:'Pb(NO₃)₂', cation:'Pb²⁺', fiCls:'fi-pb', icon:'🟡', eq:'Pb²⁺ + K₂CrO₄ → PbCrO₄↓ (أصفر)'},
-  cu:  {name:'كبريتات النحاس',     formula:'CuSO₄',   cation:'Cu²⁺', fiCls:'fi-cu', icon:'🔵', eq:'Cu²⁺ + H₂S → CuS↓ (أسود)'},
-  cd:  {name:'كلوريد الكادميوم',   formula:'CdCl₂',   cation:'Cd²⁺', fiCls:'fi-cd', icon:'🟡', eq:'Cd²⁺ + H₂S → CdS↓ (أصفر)'},
-  al:  {name:'كلوريد الألومنيوم',  formula:'AlCl₃',   cation:'Al³⁺', fiCls:'fi-al', icon:'⚪', eq:'Al³⁺ + NH₃ → Al(OH)₃↓ (أبيض جيلاتيني)'},
-  fe2: {name:'كبريتات الحديدوز',   formula:'FeSO₄',   cation:'Fe²⁺', fiCls:'fi-fe2', icon:'🟢', eq:'Fe²⁺ + NaOH → Fe(OH)₂↓ (أخضر متسخ)'},
-  fe3: {name:'كلوريد الحديديك',    formula:'FeCl₃',   cation:'Fe³⁺', fiCls:'fi-fe3', icon:'🟤', eq:'Fe³⁺ + NaOH → Fe(OH)₃↓ (بني محمر)'},
-};
+        const CATIONS_4_6 = {
+            ni: { name: 'كلوريد النيكل', formula: 'NiCl₂', cation: 'Ni²⁺', fiCls: 'fi-ni', icon: '🟢', eq: 'Ni²⁺ + (NH₄)₂S → NiS↓ (أسود)' },
+            mn: { name: 'كبريتات المنجنيز', formula: 'MnSO₄', cation: 'Mn²⁺', fiCls: 'fi-mn', icon: '🟤', eq: 'Mn²⁺ + (NH₄)₂S → MnS↓ (Buff)' },
+            ba: { name: 'كلوريد الباريوم', formula: 'BaCl₂', cation: 'Ba²⁺', fiCls: 'fi-ba', icon: '🟡', eq: 'Ba²⁺ + K₂CrO₄ → BaCrO₄↓ (أصفر)' },
+            ca: { name: 'كلوريد الكالسيوم', formula: 'CaCl₂', cation: 'Ca²⁺', fiCls: 'fi-ca', icon: '⚪', eq: 'Ca²⁺ + (NH₄)₂CO₃ → CaCO₃↓ (أبيض)' },
+            k: { name: 'كلوريد البوتاسيوم', formula: 'KCl', cation: 'K⁺', fiCls: 'fi-k', icon: '🟣', eq: 'K⁺ + NaCoB(NO₂)₄ → K₂CoB(NO₂)₆↓ (أصفر)' },
+            na: { name: 'كلوريد الصوديوم (كاتيون)', formula: 'NaCl', cation: 'Na⁺', fiCls: 'fi-na', icon: '🔵', eq: 'Na⁺ + لا راسب مميز' },
+        };
 
-const CATIONS_4_6 = {
-  ni:  {name:'كلوريد النيكل',      formula:'NiCl₂',   cation:'Ni²⁺', fiCls:'fi-ni', icon:'🟢', eq:'Ni²⁺ + (NH₄)₂S → NiS↓ (أسود)'},
-  mn:  {name:'كبريتات المنجنيز',   formula:'MnSO₄',   cation:'Mn²⁺', fiCls:'fi-mn', icon:'🟤', eq:'Mn²⁺ + (NH₄)₂S → MnS↓ (Buff)'},
-  ba:  {name:'كلوريد الباريوم',    formula:'BaCl₂',   cation:'Ba²⁺', fiCls:'fi-ba', icon:'🟡', eq:'Ba²⁺ + K₂CrO₄ → BaCrO₄↓ (أصفر)'},
-  ca:  {name:'كلوريد الكالسيوم',   formula:'CaCl₂',   cation:'Ca²⁺', fiCls:'fi-ca', icon:'⚪', eq:'Ca²⁺ + (NH₄)₂CO₃ → CaCO₃↓ (أبيض)'},
-  k:   {name:'كلوريد البوتاسيوم',   formula:'KCl',     cation:'K⁺',  fiCls:'fi-k', icon:'🟣', eq:'K⁺ + NaCoB(NO₂)₄ → K₂CoB(NO₂)₆↓ (أصفر)'},
-  na:  {name:'كلوريد الصوديوم (كاتيون)',    formula:'NaCl',    cation:'Na⁺', fiCls:'fi-na', icon:'🔵', eq:'Na⁺ + لا راسب مميز'},
-};
+        const REACTIONS_ANIONS = {
+            co3: {
+                hcl: { obs: '🫧 <strong>فوران قوي!</strong> غاز عديم اللون عديم الرائحة <span style="color:#86efac;">(CO₂)</span>', visual: { bubbles: 'rgba(200,255,200,0.4)', liq: 'rgba(120,200,140,0.22)' } },
+                h2so4: { obs: '🫧 <strong>فوران</strong> — CO₂ عديم الرائحة', visual: { bubbles: 'rgba(200,255,200,0.35)', liq: 'rgba(120,200,140,0.18)' } },
+                k2cr: { obs: '❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇', visual: {} },
+                fecl3: { obs: '🟤 <strong>عكارة بنية خفيفة</strong>', visual: { liq: 'rgba(160,90,40,0.2)', precip: 'rgba(160,90,40,0.3)', precipH: 6 } },
+                mgso4: { obs: '⬜ <strong>راسب أبيض MgCO₃ فورًا على البارد!</strong>', visual: { precip: 'rgba(230,240,255,0.8)', precipH: 18 } },
+                bacl2: { obs: '⬜ <strong>راسب أبيض BaCO₃</strong>', visual: { precip: 'rgba(230,240,255,0.7)', precipH: 14 } },
+                pbac: { obs: '⬜ <strong>راسب أبيض PbCO₃</strong>', visual: { precip: 'rgba(230,240,255,0.65)', precipH: 11 } },
+            },
+            hco3: {
+                hcl: { obs: '🫧 <strong>فوران قوي!</strong> غاز عديم اللون عديم الرائحة <span style="color:#7dd3fc;">(CO₂)</span>', visual: { bubbles: 'rgba(200,230,255,0.4)', liq: 'rgba(100,180,230,0.22)' } },
+                h2so4: { obs: '🫧 <strong>فوران</strong> — CO₂ عديم الرائحة', visual: { bubbles: 'rgba(200,230,255,0.35)', liq: 'rgba(100,180,230,0.18)' } },
+                k2cr: { obs: '❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇', visual: {} },
+                fecl3: { obs: '🟡 <strong>لون بني فاتح</strong> — تأثير طفيف', visual: { liq: 'rgba(180,130,40,0.18)' } },
+                mgso4: { obs: '❌ <strong>لا راسب على البارد</strong> — يحتاج تسخين للتأكيد (HCO₃⁻ وليس CO₃²⁻)', visual: {} },
+                bacl2: { obs: '❌ <strong>لا راسب</strong> — Ba(HCO₃)₂ قابل للذوبان', visual: {} },
+                pbac: { obs: '⬜ <strong>راسب أبيض خفيف</strong>', visual: { precip: 'rgba(220,230,245,0.45)', precipH: 6 } },
+            },
+            so3: {
+                hcl: { obs: '🫧 <strong>فوران بسيط</strong> — <span style="color:#d8b4fe;">(SO₂)</span> برائحة نفاذة — المحلول يبقى شفافًا', visual: { bubbles: 'rgba(200,180,240,0.4)', liq: 'rgba(160,130,220,0.22)', fume: 'rgba(220,200,255,0.2)' } },
+                h2so4: { obs: '💨 <strong>فوران + أبخرة</strong> — SO₂ برائحة نفاذة', visual: { bubbles: 'rgba(200,180,240,0.35)', liq: 'rgba(160,130,220,0.18)', fume: 'rgba(255,255,255,0.22)' } },
+                k2cr: { obs: '🟠→🟢 <strong>K₂Cr₂O₇ تحول إلى أخضر غامق</strong> (Cr⁶⁺ → Cr³⁺)', visual: { cr: '#166534' } },
+                fecl3: { obs: '🔴 <strong>بني محمر يظهر ثم يختفي تدريجيًا!</strong> (SO₃²⁻ يختزل Fe³⁺)', visual: { liq: 'rgba(180,60,30,0.45)', fadeToLiq: 'rgba(140,180,220,0.15)' } },
+                mgso4: { obs: '❌ <strong>لا راسب</strong> — MgSO₃ شبه ذائب', visual: {} },
+                bacl2: { obs: '⬜ <strong>راسب أبيض BaSO₃</strong>', visual: { precip: 'rgba(230,240,255,0.7)', precipH: 14 } },
+                pbac: { obs: '⬜ <strong>راسب أبيض PbSO₃</strong>', visual: { precip: 'rgba(230,240,255,0.6)', precipH: 11 } },
+            },
+            s2o3: {
+                hcl: { obs: '🫧 <strong>فوران بسيط</strong> — SO₂ برائحة نفاذة + <span style="color:#fde047;">عكارة صفراء (كبريت حر S↓)</span>!', visual: { bubbles: 'rgba(240,220,80,0.4)', liq: 'rgba(200,180,60,0.3)', precip: 'rgba(210,195,35,0.35)', precipH: 7, fume: 'rgba(220,200,255,0.2)' } },
+                h2so4: { obs: '🫧 <strong>فوران + عكارة صفراء</strong> — SO₂ + S↓', visual: { bubbles: 'rgba(240,220,80,0.35)', liq: 'rgba(200,180,60,0.25)', precip: 'rgba(210,195,35,0.3)', precipH: 6 } },
+                k2cr: { obs: '🟠→🟡 <strong>K₂Cr₂O₇ تحول إلى أخضر مصفر</strong> (تأثير مختلف عن SO₃²⁻)', visual: { cr: '#a3e635' } },
+                fecl3: { obs: '🟣 <strong>لون بنفسجي!</strong> تكوين معقد [Fe(S₂O₃)]⁺', visual: { liq: 'rgba(150,60,220,0.45)' } },
+                mgso4: { obs: '❌ <strong>لا راسب مميز</strong>', visual: {} },
+                bacl2: { obs: '⬜ <strong>راسب أبيض BaS₂O₃</strong>', visual: { precip: 'rgba(230,240,255,0.65)', precipH: 12 } },
+                pbac: { obs: '⬜ <strong>راسب أبيض PbS₂O₃</strong>', visual: { precip: 'rgba(230,240,255,0.6)', precipH: 10 } },
+            },
+            cl: {
+                hcl: { obs: '❌ <strong>لا فوران ولا غاز</strong> — لا تفاعل مع HCl المخفف', visual: {} },
+                h2so4: { obs: '💨 <strong>أبخرة بيضاء حادة (HCl)!</strong> رائحة نفاذة جدًا', visual: { fume: 'rgba(255,255,255,0.4)', liq: 'rgba(180,200,220,0.15)' } },
+                k2cr: { obs: '❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇', visual: {} },
+                fecl3: { obs: '🟡 <strong>لون أصفر فاتح فقط</strong> — لون FeCl₃ الطبيعي بدون تفاعل', visual: { liq: 'rgba(200,170,40,0.18)' } },
+                mgso4: { obs: '❌ <strong>لا راسب</strong>', visual: {} },
+                bacl2: { obs: '❌ <strong>لا راسب</strong> — BaCl₂ لا يرسّب Cl⁻', visual: {} },
+                pbac: { obs: '⬜ <strong>راسب أبيض PbCl₂!</strong> يذوب بالماء الساخن ويعود بالتبريد', visual: { precip: 'rgba(235,242,255,0.8)', precipH: 18 } },
+            },
+            so4: {
+                hcl: { obs: '❌ <strong>لا فوران ولا غاز</strong> — لا تفاعل', visual: {} },
+                h2so4: { obs: '❌ <strong>لا تفاعل مميز</strong>', visual: {} },
+                k2cr: { obs: '❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇', visual: {} },
+                fecl3: { obs: '🟡 <strong>لون أصفر فقط بلا راسب</strong> — لون FeCl₃ الطبيعي', visual: { liq: 'rgba(200,170,40,0.22)' } },
+                mgso4: { obs: '❌ <strong>لا راسب</strong>', visual: {} },
+                bacl2: { obs: '⬜ <strong>راسب أبيض كثيف BaSO₄!</strong> لا يذوب في أي حمض — تأكيد قاطع', visual: { precip: 'rgba(230,240,255,0.85)', precipH: 22 } },
+                pbac: { obs: '⬜ <strong>راسب أبيض PbSO₄</strong>', visual: { precip: 'rgba(230,240,255,0.65)', precipH: 15 } },
+            },
+            po4: {
+                hcl: { obs: '❌ <strong>لا تفاعل</strong> مع HCl', visual: {} },
+                h2so4: { obs: '❌ <strong>لا تفاعل مميز</strong>', visual: {} },
+                k2cr: { obs: '❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇', visual: {} },
+                fecl3: { obs: '⬜ <strong>راسب أبيض مصفر FePO₄</strong>', visual: { precip: 'rgba(250,245,210,0.8)', precipH: 16 } },
+                mgso4: { obs: '⬜ <strong>راسب أبيض Mg₃(PO₄)₂</strong>', visual: { precip: 'rgba(230,240,255,0.6)', precipH: 12 } },
+                bacl2: { obs: '⬜ <strong>راسب أبيض Ba₃(PO₄)₂</strong>', visual: { precip: 'rgba(230,240,255,0.7)', precipH: 14 } },
+                pbac: { obs: '⬜ <strong>راسب أبيض Pb₃(PO₄)₂</strong>', visual: { precip: 'rgba(230,240,255,0.65)', precipH: 11 } },
+            }
+        };
 
-const REACTIONS_ANIONS = {
-  co3:{
-    hcl:  {obs:'🫧 <strong>فوران قوي!</strong> غاز عديم اللون عديم الرائحة <span style="color:#86efac;">(CO₂)</span>',visual:{bubbles:'rgba(200,255,200,0.4)',liq:'rgba(120,200,140,0.22)'}},
-    h2so4:{obs:'🫧 <strong>فوران</strong> — CO₂ عديم الرائحة',visual:{bubbles:'rgba(200,255,200,0.35)',liq:'rgba(120,200,140,0.18)'}},
-    k2cr: {obs:'❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇',visual:{}},
-    fecl3:{obs:'🟤 <strong>عكارة بنية خفيفة</strong>',visual:{liq:'rgba(160,90,40,0.2)',precip:'rgba(160,90,40,0.3)',precipH:6}},
-    mgso4:{obs:'⬜ <strong>راسب أبيض MgCO₃ فورًا على البارد!</strong>',visual:{precip:'rgba(230,240,255,0.8)',precipH:18}},
-    bacl2:{obs:'⬜ <strong>راسب أبيض BaCO₃</strong>',visual:{precip:'rgba(230,240,255,0.7)',precipH:14}},
-    pbac: {obs:'⬜ <strong>راسب أبيض PbCO₃</strong>',visual:{precip:'rgba(230,240,255,0.65)',precipH:11}},
-  },
-  hco3:{
-    hcl:  {obs:'🫧 <strong>فوران قوي!</strong> غاز عديم اللون عديم الرائحة <span style="color:#7dd3fc;">(CO₂)</span>',visual:{bubbles:'rgba(200,230,255,0.4)',liq:'rgba(100,180,230,0.22)'}},
-    h2so4:{obs:'🫧 <strong>فوران</strong> — CO₂ عديم الرائحة',visual:{bubbles:'rgba(200,230,255,0.35)',liq:'rgba(100,180,230,0.18)'}},
-    k2cr: {obs:'❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇',visual:{}},
-    fecl3:{obs:'🟡 <strong>لون بني فاتح</strong> — تأثير طفيف',visual:{liq:'rgba(180,130,40,0.18)'}},
-    mgso4:{obs:'❌ <strong>لا راسب على البارد</strong> — يحتاج تسخين للتأكيد (HCO₃⁻ وليس CO₃²⁻)',visual:{}},
-    bacl2:{obs:'❌ <strong>لا راسب</strong> — Ba(HCO₃)₂ قابل للذوبان',visual:{}},
-    pbac: {obs:'⬜ <strong>راسب أبيض خفيف</strong>',visual:{precip:'rgba(220,230,245,0.45)',precipH:6}},
-  },
-  so3:{
-    hcl:  {obs:'🫧 <strong>فوران بسيط</strong> — <span style="color:#d8b4fe;">(SO₂)</span> برائحة نفاذة — المحلول يبقى شفافًا',visual:{bubbles:'rgba(200,180,240,0.4)',liq:'rgba(160,130,220,0.22)',fume:'rgba(220,200,255,0.2)'}},
-    h2so4:{obs:'💨 <strong>فوران + أبخرة</strong> — SO₂ برائحة نفاذة',visual:{bubbles:'rgba(200,180,240,0.35)',liq:'rgba(160,130,220,0.18)',fume:'rgba(255,255,255,0.22)'}},
-    k2cr: {obs:'🟠→🟢 <strong>K₂Cr₂O₇ تحول إلى أخضر غامق</strong> (Cr⁶⁺ → Cr³⁺)',visual:{cr:'#166534'}},
-    fecl3:{obs:'🔴 <strong>بني محمر يظهر ثم يختفي تدريجيًا!</strong> (SO₃²⁻ يختزل Fe³⁺)',visual:{liq:'rgba(180,60,30,0.45)',fadeToLiq:'rgba(140,180,220,0.15)'}},
-    mgso4:{obs:'❌ <strong>لا راسب</strong> — MgSO₃ شبه ذائب',visual:{}},
-    bacl2:{obs:'⬜ <strong>راسب أبيض BaSO₃</strong>',visual:{precip:'rgba(230,240,255,0.7)',precipH:14}},
-    pbac: {obs:'⬜ <strong>راسب أبيض PbSO₃</strong>',visual:{precip:'rgba(230,240,255,0.6)',precipH:11}},
-  },
-  s2o3:{
-    hcl:  {obs:'🫧 <strong>فوران بسيط</strong> — SO₂ برائحة نفاذة + <span style="color:#fde047;">عكارة صفراء (كبريت حر S↓)</span>!',visual:{bubbles:'rgba(240,220,80,0.4)',liq:'rgba(200,180,60,0.3)',precip:'rgba(210,195,35,0.35)',precipH:7,fume:'rgba(220,200,255,0.2)'}},
-    h2so4:{obs:'🫧 <strong>فوران + عكارة صفراء</strong> — SO₂ + S↓',visual:{bubbles:'rgba(240,220,80,0.35)',liq:'rgba(200,180,60,0.25)',precip:'rgba(210,195,35,0.3)',precipH:6}},
-    k2cr: {obs:'🟠→🟡 <strong>K₂Cr₂O₇ تحول إلى أخضر مصفر</strong> (تأثير مختلف عن SO₃²⁻)',visual:{cr:'#a3e635'}},
-    fecl3:{obs:'🟣 <strong>لون بنفسجي!</strong> تكوين معقد [Fe(S₂O₃)]⁺',visual:{liq:'rgba(150,60,220,0.45)'}},
-    mgso4:{obs:'❌ <strong>لا راسب مميز</strong>',visual:{}},
-    bacl2:{obs:'⬜ <strong>راسب أبيض BaS₂O₃</strong>',visual:{precip:'rgba(230,240,255,0.65)',precipH:12}},
-    pbac: {obs:'⬜ <strong>راسب أبيض PbS₂O₃</strong>',visual:{precip:'rgba(230,240,255,0.6)',precipH:10}},
-  },
-  cl:{
-    hcl:  {obs:'❌ <strong>لا فوران ولا غاز</strong> — لا تفاعل مع HCl المخفف',visual:{}},
-    h2so4:{obs:'💨 <strong>أبخرة بيضاء حادة (HCl)!</strong> رائحة نفاذة جدًا',visual:{fume:'rgba(255,255,255,0.4)',liq:'rgba(180,200,220,0.15)'}},
-    k2cr: {obs:'❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇',visual:{}},
-    fecl3:{obs:'🟡 <strong>لون أصفر فاتح فقط</strong> — لون FeCl₃ الطبيعي بدون تفاعل',visual:{liq:'rgba(200,170,40,0.18)'}},
-    mgso4:{obs:'❌ <strong>لا راسب</strong>',visual:{}},
-    bacl2:{obs:'❌ <strong>لا راسب</strong> — BaCl₂ لا يرسّب Cl⁻',visual:{}},
-    pbac: {obs:'⬜ <strong>راسب أبيض PbCl₂!</strong> يذوب بالماء الساخن ويعود بالتبريد',visual:{precip:'rgba(235,242,255,0.8)',precipH:18}},
-  },
-  so4:{
-    hcl:  {obs:'❌ <strong>لا فوران ولا غاز</strong> — لا تفاعل',visual:{}},
-    h2so4:{obs:'❌ <strong>لا تفاعل مميز</strong>',visual:{}},
-    k2cr: {obs:'❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇',visual:{}},
-    fecl3:{obs:'🟡 <strong>لون أصفر فقط بلا راسب</strong> — لون FeCl₃ الطبيعي',visual:{liq:'rgba(200,170,40,0.22)'}},
-    mgso4:{obs:'❌ <strong>لا راسب</strong>',visual:{}},
-    bacl2:{obs:'⬜ <strong>راسب أبيض كثيف BaSO₄!</strong> لا يذوب في أي حمض — تأكيد قاطع',visual:{precip:'rgba(230,240,255,0.85)',precipH:22}},
-    pbac: {obs:'⬜ <strong>راسب أبيض PbSO₄</strong>',visual:{precip:'rgba(230,240,255,0.65)',precipH:15}},
-  },
-  po4:{
-    hcl:  {obs:'❌ <strong>لا تفاعل</strong> مع HCl',visual:{}},
-    h2so4:{obs:'❌ <strong>لا تفاعل مميز</strong>',visual:{}},
-    k2cr: {obs:'❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇',visual:{}},
-    fecl3:{obs:'⬜ <strong>راسب أبيض مصفر FePO₄</strong>',visual:{precip:'rgba(250,245,210,0.8)',precipH:16}},
-    mgso4:{obs:'⬜ <strong>راسب أبيض Mg₃(PO₄)₂</strong>',visual:{precip:'rgba(230,240,255,0.6)',precipH:12}},
-    bacl2:{obs:'⬜ <strong>راسب أبيض Ba₃(PO₄)₂</strong>',visual:{precip:'rgba(230,240,255,0.7)',precipH:14}},
-    pbac: {obs:'⬜ <strong>راسب أبيض Pb₃(PO₄)₂</strong>',visual:{precip:'rgba(230,240,255,0.65)',precipH:11}},
-  }
-};
+        const REACTIONS_CATIONS_1_3 = {
+            pb: {
+                hcl: { obs: '⬜ <strong>راسب أبيض PbCl₂</strong> يذوب بالتسخين', visual: { precip: 'rgba(255,255,255,0.8)', precipH: 15 } },
+                k2cr: { obs: '🟡 <strong>راسب أصفر PbCrO₄</strong>', visual: { precip: 'rgba(255,255,0,0.9)', precipH: 18 } },
+                naoh: { obs: '⬜ <strong>راسب أبيض</strong> يذوب في الزيادة', visual: { precip: 'rgba(255,255,255,0.7)', precipH: 12 } }
+            },
+            cu: {
+                h2s: { obs: '⚫ <strong>راسب أسود CuS</strong>', visual: { precip: 'rgba(20,20,20,0.9)', precipH: 18 } },
+                nh4oh: { obs: '🔵 <strong>راسب أزرق باهت</strong> يذوب في الزيادة ليعطي لون أزرق غامق', visual: { precip: 'rgba(100,149,237,0.7)', precipH: 12, liq: 'rgba(0,0,139,0.4)' } },
+                naoh: { obs: '🔵 <strong>راسب أزرق</strong> لا يذوب في الزيادة', visual: { precip: 'rgba(0,0,255,0.7)', precipH: 15 } }
+            },
+            cd: {
+                h2s: { obs: '🟡 <strong>راسب أصفر CdS</strong>', visual: { precip: 'rgba(255,255,0,0.8)', precipH: 18 } },
+                naoh: { obs: '⬜ <strong>راسب أبيض</strong> لا يذوب في الزيادة', visual: { precip: 'rgba(255,255,255,0.7)', precipH: 12 } }
+            },
+            al: {
+                nh4cloh: { obs: '⬜ <strong>راسب أبيض جيلاتيني Al(OH)₃</strong>', visual: { precip: 'rgba(240,248,255,0.6)', precipH: 20 } },
+                naoh: { obs: '⬜ <strong>راسب أبيض جيلاتيني</strong> يذوب في الزيادة', visual: { precip: 'rgba(240,248,255,0.5)', precipH: 15 } }
+            },
+            fe2: {
+                nh4cloh: { obs: '🟢 <strong>راسب أبيض مخضر Fe(OH)₂</strong>', visual: { precip: 'rgba(144,238,144,0.6)', precipH: 18 } },
+                naoh: { obs: '🟢 <strong>راسب أبيض مخضر</strong> يتحول لبني محمر بالتعرض للهواء', visual: { precip: 'rgba(34,139,34,0.6)', precipH: 18 } }
+            },
+            fe3: {
+                nh4cloh: { obs: '🟤 <strong>راسب بني محمر Fe(OH)₃</strong>', visual: { precip: 'rgba(139,69,19,0.8)', precipH: 20 } },
+                naoh: { obs: '🟤 <strong>راسب بني محمر</strong> لا يذوب في الزيادة', visual: { precip: 'rgba(165,42,42,0.8)', precipH: 20 } }
+            }
+        };
 
-const REACTIONS_CATIONS_1_3 = {
-  pb: {
-    hcl: {obs:'⬜ <strong>راسب أبيض PbCl₂</strong> يذوب بالتسخين',visual:{precip:'rgba(255,255,255,0.8)',precipH:15}},
-    k2cr: {obs:'🟡 <strong>راسب أصفر PbCrO₄</strong>',visual:{precip:'rgba(255,255,0,0.9)',precipH:18}},
-    naoh: {obs:'⬜ <strong>راسب أبيض</strong> يذوب في الزيادة',visual:{precip:'rgba(255,255,255,0.7)',precipH:12}}
-  },
-  cu: {
-    h2s: {obs:'⚫ <strong>راسب أسود CuS</strong>',visual:{precip:'rgba(20,20,20,0.9)',precipH:18}},
-    nh4oh: {obs:'🔵 <strong>راسب أزرق باهت</strong> يذوب في الزيادة ليعطي لون أزرق غامق',visual:{precip:'rgba(100,149,237,0.7)',precipH:12,liq:'rgba(0,0,139,0.4)'}},
-    naoh: {obs:'🔵 <strong>راسب أزرق</strong> لا يذوب في الزيادة',visual:{precip:'rgba(0,0,255,0.7)',precipH:15}}
-  },
-  cd: {
-    h2s: {obs:'🟡 <strong>راسب أصفر CdS</strong>',visual:{precip:'rgba(255,255,0,0.8)',precipH:18}},
-    naoh: {obs:'⬜ <strong>راسب أبيض</strong> لا يذوب في الزيادة',visual:{precip:'rgba(255,255,255,0.7)',precipH:12}}
-  },
-  al: {
-    nh4cloh: {obs:'⬜ <strong>راسب أبيض جيلاتيني Al(OH)₃</strong>',visual:{precip:'rgba(240,248,255,0.6)',precipH:20}},
-    naoh: {obs:'⬜ <strong>راسب أبيض جيلاتيني</strong> يذوب في الزيادة',visual:{precip:'rgba(240,248,255,0.5)',precipH:15}}
-  },
-  fe2: {
-    nh4cloh: {obs:'🟢 <strong>راسب أبيض مخضر Fe(OH)₂</strong>',visual:{precip:'rgba(144,238,144,0.6)',precipH:18}},
-    naoh: {obs:'🟢 <strong>راسب أبيض مخضر</strong> يتحول لبني محمر بالتعرض للهواء',visual:{precip:'rgba(34,139,34,0.6)',precipH:18}}
-  },
-  fe3: {
-    nh4cloh: {obs:'🟤 <strong>راسب بني محمر Fe(OH)₃</strong>',visual:{precip:'rgba(139,69,19,0.8)',precipH:20}},
-    naoh: {obs:'🟤 <strong>راسب بني محمر</strong> لا يذوب في الزيادة',visual:{precip:'rgba(165,42,42,0.8)',precipH:20}}
-  }
-};
+        // ✅ التعديلات هنا: إضافة k2cr لـ ca وإضافة cobalti لـ na
+        const REACTIONS_CATIONS_4_6 = {
+            ni: {
+                nh4clohh2s: { obs: '⚫ <strong>راسب أسود NiS</strong>', visual: { precip: 'rgba(10,10,10,0.9)', precipH: 18 } },
+                naoh: { obs: '🟢 <strong>راسب أخضر</strong> لا يذوب في الزيادة', visual: { precip: 'rgba(0,255,0,0.6)', precipH: 15 } }
+            },
+            mn: {
+                nh4clohh2s: { obs: ' <strong>راسب وردي (Buff) MnS</strong>', visual: { precip: 'rgba(255,182,193,0.7)', precipH: 18 } },
+                naoh: { obs: ' <strong>راسب وردي</strong> ', visual: { precip: 'rgba(255,182,193,0.7)', precipH: 20 } }
+            },
+            ba: {
+                nh4clohco3: { obs: '⬜ <strong>راسب أبيض BaCO₃</strong>', visual: { precip: 'rgba(255,255,255,0.8)', precipH: 18 } },
+                k2cr: { obs: '🟡 <strong>راسب أصفر BaCrO₄</strong>', visual: { precip: 'rgba(255,255,0,0.9)', precipH: 18 } }
+            },
+            ca: {
+                nh4clohco3: { obs: '⬜ <strong>راسب أبيض CaCO₃</strong>', visual: { precip: 'rgba(255,255,255,0.8)', precipH: 18 } },
+                // ✅ تعديل: CaCl₂ + K₂CrO₄ → تحول المحلول لأصفر خفيف (CaCrO₄ شبه ذائب)
+                k2cr: { obs: '🟡 <strong>تحول طفيف في لون المحلول نحو الأصفر الخفيف</strong> — CaCrO₄ شبه ذائب ولا يترسب بشكل واضح', visual: { liq: 'rgba(255,230,50,0.25)' } }
+            },
+            k: {
+                cobalti: { obs: '🟡 <strong>راسب أصفر</strong> من كوبالتي نيتريت البوتاسيوم', visual: { precip: 'rgba(255,255,0,0.7)', precipH: 12 } }
+            },
+            na: {
+                naoh: { obs: '❌ <strong>لا يوجد راسب مميز</strong> مع NaOH', visual: {} },
+                // ✅ تعديل: NaCl + Sodium Cobaltinitrite → لون أصفر/برتقالي في المحلول
+                cobalti: { obs: '🟠 <strong>تلوين أصفر-برتقالي في المحلول!</strong> — تكوين Na₃[Co(NO₂)₆] — كاشف مميز لـ Na⁺', visual: { liq: 'rgba(255,185,0,0.45)' } }
+            }
+        };
 
-const REACTIONS_CATIONS_4_6 = {
-  ni: {
-    nh4clohh2s: {obs:'⚫ <strong>راسب أسود NiS</strong>',visual:{precip:'rgba(10,10,10,0.9)',precipH:18}},
-    naoh: {obs:'🟢 <strong>راسب أخضر</strong> لا يذوب في الزيادة',visual:{precip:'rgba(0,255,0,0.6)',precipH:15}}
-  },
-  mn: {
-    nh4clohh2s: {obs:'🍑 <strong>راسب وردي (Buff) MnS</strong>',visual:{precip:'rgba(255,182,193,0.7)',precipH:18}},
-    naoh: {obs:'⬜ <strong>راسب أبيض</strong> يتحول لبني بالهواء',visual:{precip:'rgba(255,255,255,0.7)',precipH:15}}
-  },
-  ba: {
-    nh4clohco3: {obs:'⬜ <strong>راسب أبيض BaCO₃</strong>',visual:{precip:'rgba(255,255,255,0.8)',precipH:18}},
-    k2cr: {obs:'🟡 <strong>راسب أصفر BaCrO₄</strong>',visual:{precip:'rgba(255,255,0,0.9)',precipH:18}}
-  },
-  ca: {
-    nh4clohco3: {obs:'⬜ <strong>راسب أبيض CaCO₃</strong>',visual:{precip:'rgba(255,255,255,0.8)',precipH:18}}
-  },
-  k: {
-    cobalti: {obs:'🟡 <strong>راسب أصفر</strong> من كوبالتي نيتريت البوتاسيوم',visual:{precip:'rgba(255,255,0,0.7)',precipH:12}}
-  },
-  na: {
-    naoh: {obs:'❌ <strong>لا يوجد راسب مميز</strong> مع NaOH',visual:{}}
-  }
-};
+        const HINTS_ANIONS = {
+            co3: ["يعطي فوران مع الأحماض المخففة", "الغاز الناتج يعكر ماء الجير", "يعطي راسب أبيض مع MgSO4 على البارد"],
+            hco3: ["يعطي فوران مع الأحماض المخففة", "لا يعطي راسب مع MgSO4 إلا بعد التسخين"],
+            so3: ["يعطي غاز SO2 ذو الرائحة النفاذة", "يخضر ورقة مبللة بثاني كرومات البوتاسيوم"],
+            s2o3: ["يعطي غاز SO2 مع ظهور عكارة صفراء من الكبريت"],
+            cl: ["لا يتفاعل مع HCl المخفف", "يعطي سحب بيضاء مع ساق مبللة بالنشادر عند تفاعله مع H2SO4 المركز"],
+            so4: ["يعطي راسب أبيض مع كلوريد الباريوم لا يذوب في الأحماض"],
+            po4: ["يعطي راسب أصفر مع نترات الفضة يذوب في النشادر"]
+        };
 
-const HINTS_ANIONS = {
-  co3: ["يعطي فوران مع الأحماض المخففة","الغاز الناتج يعكر ماء الجير","يعطي راسب أبيض مع MgSO4 على البارد"],
-  hco3: ["يعطي فوران مع الأحماض المخففة","لا يعطي راسب مع MgSO4 إلا بعد التسخين"],
-  so3: ["يعطي غاز SO2 ذو الرائحة النفاذة","يخضر ورقة مبللة بثاني كرومات البوتاسيوم"],
-  s2o3: ["يعطي غاز SO2 مع ظهور عكارة صفراء من الكبريت"],
-  cl: ["لا يتفاعل مع HCl المخفف","يعطي سحب بيضاء مع ساق مبللة بالنشادر عند تفاعله مع H2SO4 المركز"],
-  so4: ["يعطي راسب أبيض مع كلوريد الباريوم لا يذوب في الأحماض"],
-  po4: ["يعطي راسب أصفر مع نترات الفضة يذوب في النشادر"]
-};
+        const HINTS_CATIONS_1_3 = {
+            pb: ["ينتمي للمجموعة التحليلية الأولى", "يعطي راسب أبيض مع HCl"],
+            cu: ["يعطي راسب أسود مع H2S في وسط حامضي"],
+            cd: ["يعطي راسب أصفر مع H2S في وسط حامضي"],
+            al: ["يعطي راسب أبيض جيلاتيني مع النشادر"],
+            fe2: ["يعطي راسب أبيض مخضر مع القلويات"],
+            fe3: ["يعطي راسب بني محمر مع القلويات"]
+        };
 
-const HINTS_CATIONS_1_3 = {
-  pb: ["ينتمي للمجموعة التحليلية الأولى","يعطي راسب أبيض مع HCl"],
-  cu: ["يعطي راسب أسود مع H2S في وسط حامضي"],
-  cd: ["يعطي راسب أصفر مع H2S في وسط حامضي"],
-  al: ["يعطي راسب أبيض جيلاتيني مع النشادر"],
-  fe2: ["يعطي راسب أبيض مخضر مع القلويات"],
-  fe3: ["يعطي راسب بني محمر مع القلويات"]
-};
+        const HINTS_CATIONS_4_6 = {
+            ni: ["يعطي راسب أسود مع H2S في وسط قاعدي"],
+            mn: ["يعطي راسب وردي (Buff) مع H2S في وسط قاعدي"],
+            ba: ["يعطي راسب أصفر مع كرومات البوتاسيوم"],
+            ca: ["يعطي راسب أبيض مع كربونات الأمونيوم", "يعطي تلوين أصفر خفيف مع كرومات البوتاسيوم (CaCrO₄ شبه ذائب)"],
+            k: ["يعطي لون بنفسجي في اختبار اللهب"],
+            na: ["يعطي لون أصفر ذهبي في اختبار اللهب", "يعطي تلوين أصفر-برتقالي مع sodium cobaltinitrite"]
+        };
 
-const HINTS_CATIONS_4_6 = {
-  ni: ["يعطي راسب أسود مع H2S في وسط قاعدي"],
-  mn: ["يعطي راسب وردي (Buff) مع H2S في وسط قاعدي"],
-  ba: ["يعطي راسب أصفر مع كرومات البوتاسيوم"],
-  ca: ["يعطي راسب أبيض مع كربونات الأمونيوم"],
-  k: ["يعطي لون بنفسجي في اختبار اللهب"],
-  na: ["يعطي لون أصفر ذهبي في اختبار اللهب"]
-};
+        let currentSection = 'anions';
+        let salt = null;
+        let isRandom = false;
+        let hintIdx = 0;
+        let bubbleTimer = null;
+        let fadeTimer = null;
 
-// ── STATE ──
-let currentSection = 'anions';
-let salt = null;
-let isRandom = false;
-let hintIdx = 0;
-let bubbleTimer = null;
-let fadeTimer = null;
+        function switchSection(s) {
+            currentSection = s;
+            document.querySelectorAll('.section-btn').forEach(b => {
+                b.classList.remove('active');
+                if (b.getAttribute('onclick').includes(s)) b.classList.add('active');
+            });
+            updateSaltPanel();
+            resetLab();
+        }
 
-// ── UI HELPERS ──
-function switchSection(s) {
-  currentSection = s;
-  document.querySelectorAll('.section-btn').forEach(b => {
-    b.classList.remove('active');
-    if (b.getAttribute('onclick').includes(s)) b.classList.add('active');
-  });
-  updateSaltPanel();
-  resetLab();
-}
+        function updateSaltPanel() {
+            const grid = document.getElementById('saltGrid');
+            grid.innerHTML = '';
+            let salts = {};
+            let title = '⚗️ اختر ملحًا للتحليل:';
 
-function updateSaltPanel() {
-  const grid = document.getElementById('saltGrid');
-  grid.innerHTML = '';
-  let salts = {};
-  let title = '⚗️ اختر ملحًا للتحليل:';
-  
-  if(currentSection==='anions') { salts=ANIONS; title='🟢 أملاح الشقوق الحامضية (الأنيونات)'; }
-  else if(currentSection==='cations1') { salts=CATIONS_1_3; title='🔵 أملاح الشقوق القاعدية (1-3)'; }
-  else if(currentSection==='cations2') { salts=CATIONS_4_6; title='🟣 أملاح الشقوق القاعدية (4-6)'; }
-  else if(currentSection==='unknown') { salts={}; title='❓ تحدي الملح المجهول'; }
-  
-  document.querySelector('.salt-panel h3').textContent=title;
-  Object.keys(salts).forEach(k=>{
-    const btn=document.createElement('button');
-    btn.className='salt-btn';
-    btn.textContent=salts[k].formula;
-    btn.onclick=()=>selectSalt(k,false);
-    grid.appendChild(btn);
-  });
-  
-  const randomBtn=document.createElement('button');
-  randomBtn.className='salt-btn random-btn';
-  randomBtn.textContent='🎲 تحدي عشوائي';
-  randomBtn.onclick=()=>selectSalt('random',true);
-  grid.appendChild(randomBtn);
-  
-  updateReagentPanel();
-}
+            if (currentSection === 'anions') { salts = ANIONS; title = '🟢 أملاح الشقوق الحامضية (الأنيونات)'; }
+            else if (currentSection === 'cations1') { salts = CATIONS_1_3; title = '🔵 أملاح الشقوق القاعدية (1-3)'; }
+            else if (currentSection === 'cations2') { salts = CATIONS_4_6; title = '🟣 أملاح الشقوق القاعدية (4-6)'; }
+            else if (currentSection === 'unknown') { salts = {}; title = '❓ تحدي الملح المجهول'; }
 
-function updateReagentPanel() {
-  const grid=document.getElementById('reagentGrid');
-  grid.innerHTML='';
-  
-  let reagents = [];
-  if(currentSection==='anions') reagents=['hcl','h2so4','k2cr','fecl3','mgso4','bacl2','pbac'];
-  else if(currentSection==='cations1') reagents=['hcl','h2s','nh4cloh','nh4oh','naoh','k2cr'];
-  else if(currentSection==='cations2') reagents=['nh4clohh2s','nh4clohco3','naoh','k2cr','cobalti'];
-  else reagents=['hcl','h2so4','k2cr','fecl3','mgso4','bacl2','nh4cloh','nh4clohh2s','nh4clohco3','naoh','cobalti'];
+            document.querySelector('.salt-panel h3').textContent = title;
+            Object.keys(salts).forEach(k => {
+                const btn = document.createElement('button');
+                btn.className = 'salt-btn';
+                btn.textContent = salts[k].formula;
+                btn.onclick = () => selectSalt(k, false);
+                grid.appendChild(btn);
+            });
 
-  const reagentLabels={
-    hcl:'dilute HCl',h2so4:'H₂SO₄ مركز',k2cr:'Potassium chromate',fecl3:'FeCl₃',mgso4:'MgSO₄',bacl2:'BaCl₂',pbac:'خلات الرصاص',
-    nh4cloh:'NH₄Cl + NH₄OH',nh4clohh2s:'NH₄Cl + NH₄OH + H₂S',h2s:'H₂S Soln',nh4oh:'NH₄OH',naoh:'NaOH',h2co3:'(NH₄)₂CO₃',nh4clohco3:'NH₄Cl + NH₄OH + (NH₄)₂CO₃',cobalti:'Sodium Cobalti nitrite'
-  };
-  
-  reagents.forEach(r=>{
-    const btn=document.createElement('button');
-    btn.className='reag-btn';
-    btn.id='r_'+r;
-    btn.innerHTML=`${reagentLabels[r]||r} <span class="reag-icon">💧</span>`;
-    btn.onclick=()=>addReagent(r);
-    grid.appendChild(btn);
-  });
-}
+            const randomBtn = document.createElement('button');
+            randomBtn.className = 'salt-btn random-btn';
+            randomBtn.textContent = '🎲 تحدي عشوائي';
+            randomBtn.onclick = () => selectSalt('random', true);
+            grid.appendChild(randomBtn);
 
-function selectSalt(key, random) {
-  resetLab();
-  let salts={};
-  
-  if(currentSection==='anions') salts=ANIONS;
-  else if(currentSection==='cations1') salts=CATIONS_1_3;
-  else if(currentSection==='cations2') salts=CATIONS_4_6;
-  else if(currentSection==='unknown') {
-    salts = {};
-    Object.keys(ANIONS).forEach(k => salts['anion_'+k] = ANIONS[k]);
-    Object.keys(CATIONS_1_3).forEach(k => salts['cat1_'+k] = CATIONS_1_3[k]);
-    Object.keys(CATIONS_4_6).forEach(k => salts['cat2_'+k] = CATIONS_4_6[k]);
-  }
-  
-  if (key==='random') {
-    const keys=Object.keys(salts);
-    key=keys[Math.floor(Math.random()*keys.length)];
-    isRandom=true;
-    document.querySelectorAll('.salt-btn').forEach(b=>{
-      if(b.textContent.includes('🎲')) b.classList.add('active');
-    });
-  } else {
-    isRandom=false;
-    document.querySelectorAll('.salt-btn').forEach(b=>{
-      if(b.textContent===salts[key].formula) b.classList.add('active');
-    });
-  }
-  
-  salt = key;
-  setLiq(60,'rgba(255, 255, 255, 0.3)');
-  const label = isRandom ? '؟ ملح مجهول' : salts[key].formula;
-  document.getElementById('tlabel').textContent = label;
-  
-  let obsText = isRandom ? '✅ ملح مجهول في الماء — جرّب الكواشف واستنتج الأيون.' : `✅ تم إذابة <strong style="color:#fff;">${salts[key].formula}</strong> في الماء — جرّب الكواشف.`;
-  setObs(obsText);
-  ['hintBtn','guessBtn','revealBtn','clearBtn'].forEach(id=>document.getElementById(id).disabled=false);
-}
+            updateReagentPanel();
+        }
 
-function addReagent(rKey) {
-  if(!salt) return;
-  
-  let reactions={};
-  let realSalt = salt;
-  
-  if(currentSection==='anions') reactions=REACTIONS_ANIONS;
-  else if(currentSection==='cations1') reactions=REACTIONS_CATIONS_1_3;
-  else if(currentSection==='cations2') reactions=REACTIONS_CATIONS_4_6;
-  else if(currentSection==='unknown') {
-    if(salt.startsWith('anion_')) { reactions=REACTIONS_ANIONS; realSalt = salt.replace('anion_',''); }
-    else if(salt.startsWith('cat1_')) { reactions=REACTIONS_CATIONS_1_3; realSalt = salt.replace('cat1_',''); }
-    else if(salt.startsWith('cat2_')) { reactions=REACTIONS_CATIONS_4_6; realSalt = salt.replace('cat2_',''); }
-  }
-  
-  const labels={
-    hcl:'dilute HCl',h2so4:'H₂SO₄ مركز',k2cr:'Potassium chromate',fecl3:'FeCl₃',mgso4:'MgSO₄',bacl2:'BaCl₂',pbac:'خلات الرصاص',
-    nh4cloh:'NH₄Cl + NH₄OH',nh4clohh2s:'NH₄Cl + NH₄OH + H₂S',h2s:'H₂S Soln',nh4oh:'NH₄OH',naoh:'NaOH',h2co3:'(NH₄)₂CO₃',nh4clohco3:'NH₄Cl + NH₄OH + (NH₄)₂CO₃',cobalti:'Sodium Cobalti nitrite'
-  };
+        function updateReagentPanel() {
+            const grid = document.getElementById('reagentGrid');
+            grid.innerHTML = '';
 
-  const btn=document.getElementById('r_'+rKey);
-  if(btn) btn.classList.add('used');
+            let reagents = [];
+            if (currentSection === 'anions') reagents = ['hcl', 'h2so4', 'k2cr', 'fecl3', 'mgso4', 'bacl2', 'pbac'];
+            else if (currentSection === 'cations1') reagents = ['hcl', 'h2s', 'nh4cloh', 'nh4oh', 'naoh', 'k2cr'];
+            else if (currentSection === 'cations2') reagents = ['nh4clohh2s', 'nh4clohco3', 'naoh', 'k2cr', 'cobalti'];
+            else reagents = ['hcl', 'h2so4', 'k2cr', 'fecl3', 'mgso4', 'bacl2', 'nh4cloh', 'nh4clohh2s', 'nh4clohco3', 'naoh', 'cobalti'];
 
-  if(!reactions[realSalt] || !reactions[realSalt][rKey]) {
-    addObs(`<strong style="color:#64748b;">← ${labels[rKey]||rKey}:</strong> ❌ <em style="color:#475569;">لم يحدث تفاعل</em>`);
-    log(`${labels[rKey]||rKey}: لم يحدث تفاعل`);
-    return;
-  }
-  
-  const rx=reactions[realSalt][rKey];
-  applyVisual(rx.visual, rKey);
-  addObs(`<strong style="color:#64748b;">← ${labels[rKey]||rKey}:</strong> ${rx.obs}`);
-  log(`${labels[rKey]||rKey}: ${rx.obs.replace(/<[^>]+>/g,'').substring(0,55)}`);
-}
+            const reagentLabels = {
+                hcl: 'dilute HCl', h2so4: 'H₂SO₄ مركز', k2cr: 'Potassium chromate', fecl3: 'FeCl₃', mgso4: 'MgSO₄', bacl2: 'BaCl₂', pbac: 'خلات الرصاص',
+                nh4cloh: 'NH₄Cl + NH₄OH', nh4clohh2s: 'NH₄Cl + NH₄OH + H₂S', h2s: 'H₂S Soln', nh4oh: 'NH₄OH', naoh: 'NaOH', h2co3: '(NH₄)₂CO₃', nh4clohco3: 'NH₄Cl + NH₄OH + (NH₄)₂CO₃', cobalti: 'Sodium Cobalti nitrite'
+            };
 
-function applyVisual(v, rKey) {
-  if(!v) return;
-  if(v.liq) setLiq(70,v.liq);
-  if(v.bubbles) startBubbles(v.bubbles);
-  if(v.fume) showFume(v.fume);
-  if(v.precip) addPrecip(v.precipH||16, v.precip);
-  if(v.color) setLiq(70,v.color);
-  if(v.cr){ 
-    document.getElementById('crWrap').style.opacity='1'; 
-    document.getElementById('crStrip').style.background=v.cr; 
-  }
-}
+            reagents.forEach(r => {
+                const btn = document.createElement('button');
+                btn.className = 'reag-btn';
+                btn.id = 'r_' + r;
+                btn.innerHTML = `${reagentLabels[r] || r} <span class="reag-icon">💧</span>`;
+                btn.onclick = () => addReagent(r);
+                grid.appendChild(btn);
+            });
+        }
 
-function setLiq(h,color){ const t=document.getElementById('tl'); t.style.height=h+'px'; t.style.background=color; }
-function startBubbles(color){
-  stopBubbles();
-  const cont=document.getElementById('bc');
-  bubbleTimer=setInterval(()=>{
-    const b=document.createElement('div'); b.className='bubble';
-    const s=2.5+Math.random()*3;
-    b.style.cssText=`width:${s}px;height:${s}px;left:${10+Math.random()*65}%;background:${color};animation-duration:${0.8+Math.random()*1.1}s;`;
-    cont.appendChild(b); setTimeout(()=>b.remove(),2200);
-  },130);
-  setTimeout(()=>stopBubbles(),3500);
-}
-function stopBubbles(){ if(bubbleTimer){clearInterval(bubbleTimer);bubbleTimer=null;} }
-function showFume(color){ const f=document.getElementById('fumes'); f.querySelectorAll('.fume-puff').forEach(p=>p.style.background=color); f.classList.add('show'); setTimeout(()=>f.classList.remove('show'),3200); }
-function addPrecip(h,color){ const p=document.getElementById('pl'); p.style.height=h+'px'; p.style.background=color; }
+        function selectSalt(key, random) {
+            resetLab();
+            let salts = {};
 
-function addObs(html){
-  const c=document.getElementById('obsContainer');
-  c.querySelector('.obs-text:not(.obs-entry)')?.remove();
-  const d=document.createElement('div'); d.className='obs-entry obs-text'; d.innerHTML=html;
-  c.appendChild(d); c.parentElement.scrollTop=c.parentElement.scrollHeight;
-}
-function setObs(html){ document.getElementById('obsContainer').innerHTML=`<div class="obs-text">${html}</div>`; }
+            if (currentSection === 'anions') salts = ANIONS;
+            else if (currentSection === 'cations1') salts = CATIONS_1_3;
+            else if (currentSection === 'cations2') salts = CATIONS_4_6;
+            else if (currentSection === 'unknown') {
+                salts = {};
+                Object.keys(ANIONS).forEach(k => salts['anion_' + k] = ANIONS[k]);
+                Object.keys(CATIONS_1_3).forEach(k => salts['cat1_' + k] = CATIONS_1_3[k]);
+                Object.keys(CATIONS_4_6).forEach(k => salts['cat2_' + k] = CATIONS_4_6[k]);
+            }
 
-function showHint(){
-  if(!salt) return;
-  let hints={};
-  let realSalt = salt;
-  if(currentSection==='anions') hints=HINTS_ANIONS;
-  else if(currentSection==='cations1') hints=HINTS_CATIONS_1_3;
-  else if(currentSection==='cations2') hints=HINTS_CATIONS_4_6;
-  else if(currentSection==='unknown') {
-    if(salt.startsWith('anion_')) { hints=HINTS_ANIONS; realSalt = salt.replace('anion_',''); }
-    else if(salt.startsWith('cat1_')) { hints=HINTS_CATIONS_1_3; realSalt = salt.replace('cat1_',''); }
-    else if(salt.startsWith('cat2_')) { hints=HINTS_CATIONS_4_6; realSalt = salt.replace('cat2_',''); }
-  }
-  
-  if(!hints[realSalt]) return;
-  const h=hints[realSalt][hintIdx%hints[realSalt].length];
-  addObs(`💡 <em style="color:#4ade80;">${h}</em>`);
-  hintIdx++;
-}
+            if (key === 'random') {
+                const keys = Object.keys(salts);
+                key = keys[Math.floor(Math.random() * keys.length)];
+                isRandom = true;
+                document.querySelectorAll('.salt-btn').forEach(b => {
+                    if (b.textContent.includes('🎲')) b.classList.add('active');
+                });
+            } else {
+                isRandom = false;
+                document.querySelectorAll('.salt-btn').forEach(b => {
+                    if (b.textContent === salts[key].formula) b.classList.add('active');
+                });
+            }
 
-function revealAnswer(){
-  if(!salt) return;
-  let salts={};
-  if(currentSection==='anions') salts=ANIONS;
-  else if(currentSection==='cations1') salts=CATIONS_1_3;
-  else if(currentSection==='cations2') salts=CATIONS_4_6;
-  else if(currentSection==='unknown') {
-    Object.keys(ANIONS).forEach(k => salts['anion_'+k] = ANIONS[k]);
-    Object.keys(CATIONS_1_3).forEach(k => salts['cat1_'+k] = CATIONS_1_3[k]);
-    Object.keys(CATIONS_4_6).forEach(k => salts['cat2_'+k] = CATIONS_4_6[k]);
-  }
-  
-  const s=salts[salt];
-  const fi=document.getElementById('finalInner');
-  fi.className='final-inner '+s.fiCls;
-  document.getElementById('fiIcon').textContent=s.icon;
-  document.getElementById('fiName').textContent=s.name;
-  document.getElementById('fiFormula').textContent=(s.anion || s.cation) + ' — ' + s.formula;
-  document.getElementById('fiEq').textContent=s.eq;
-  document.getElementById('finalBox').className='final-box show';
-  document.getElementById('tlabel').textContent=s.name;
-  log(`الإجابة: ${s.name} (${s.formula})`,'good');
-}
+            salt = key;
+            setLiq(60, 'rgba(255, 255, 255, 0.3)');
+            const label = isRandom ? '؟ ملح مجهول' : salts[key].formula;
+            document.getElementById('tlabel').textContent = label;
 
-function openGuess(){
-  if(!salt) return;
-  let salts={};
-  if(currentSection==='anions') salts=ANIONS;
-  else if(currentSection==='cations1') salts=CATIONS_1_3;
-  else if(currentSection==='cations2') salts=CATIONS_4_6;
-  else if(currentSection==='unknown') {
-    salts = {};
-    Object.keys(ANIONS).forEach(k => salts['anion_'+k] = ANIONS[k]);
-    Object.keys(CATIONS_1_3).forEach(k => salts['cat1_'+k] = CATIONS_1_3[k]);
-    Object.keys(CATIONS_4_6).forEach(k => salts['cat2_'+k] = CATIONS_4_6[k]);
-  }
-  
-  const grid=document.getElementById('guessGrid');
-  grid.innerHTML='';
-  document.getElementById('guessResult').innerHTML='';
-  document.getElementById('modalTitle').textContent='🔮 ما هو الأيون الموجود؟';
-  
-  const keys=Object.keys(salts).sort(()=>Math.random()-.5);
-  keys.forEach(k=>{
-    const btn=document.createElement('button');
-    btn.className='guess-opt';
-    const ion=salts[k].anion || salts[k].cation;
-    btn.innerHTML=`${salts[k].icon} ${ion} <br><span style="opacity:.6;font-size:.75rem;">${salts[k].name}</span>`;
-    btn.onclick=()=>checkGuess(k,btn,salts);
-    grid.appendChild(btn);
-  });
-  document.getElementById('overlay').classList.add('show');
-}
+            let obsText = isRandom ? '✅ ملح مجهول في الماء — جرّب الكواشف واستنتج الأيون.' : `✅ تم إذابة <strong style="color:#fff;">${salts[key].formula}</strong> في الماء — جرّب الكواشف.`;
+            setObs(obsText);
+            ['hintBtn', 'guessBtn', 'revealBtn', 'clearBtn'].forEach(id => document.getElementById(id).disabled = false);
+        }
 
-function checkGuess(key, btn, salts){
-  document.querySelectorAll('.guess-opt').forEach(b=>b.style.pointerEvents='none');
-  const correct=(key===salt);
-  btn.className='guess-opt '+(correct?'correct':'wrong');
-  if(!correct){
-    const ion=salts[salt].anion || salts[salt].cation;
-    document.querySelectorAll('.guess-opt').forEach(b=>{
-      if(b.textContent.includes(ion) && b.textContent.includes(salts[salt].name)) b.className='guess-opt correct';
-    });
-  }
-  
-  document.getElementById('guessResult').innerHTML=correct
-    ? '<span style="color:#4ade80;">✅ إجابة صحيحة! 🎉</span>'
-    : `<span style="color:#f87171;">❌ خطأ — الإجابة الصحيحة: ${salts[salt].anion || salts[salt].cation}</span>`;
-  log('تخمين: '+(correct?'✅ صحيح':'❌ خطأ — '+salts[salt].name));
-}
+        function addReagent(rKey) {
+            if (!salt) return;
 
-function closeGuess(e){ if(e.target===document.getElementById('overlay')) closeGuessBtn(); }
-function closeGuessBtn(){ document.getElementById('overlay').classList.remove('show'); }
+            let reactions = {};
+            let realSalt = salt;
 
-function clearTube(){
-  stopBubbles(); clearTimeout(fadeTimer);
-  setLiq(60,'rgba(255, 255, 255, 0.3)');
-  document.getElementById('pl').style.height='0';
-  document.getElementById('fumes').classList.remove('show');
-  document.getElementById('crWrap').style.opacity='.28';
-  document.getElementById('crStrip').style.background='#f97316';
-  document.getElementById('finalBox').className='final-box';
-  document.querySelectorAll('.reag-btn').forEach(b=>b.classList.remove('used'));
-  setObs('✅ تم تنظيف الأنبوبة — يمكنك البدء من جديد.');
-  log('تنظيف الأنبوبة');
-}
+            if (currentSection === 'anions') reactions = REACTIONS_ANIONS;
+            else if (currentSection === 'cations1') reactions = REACTIONS_CATIONS_1_3;
+            else if (currentSection === 'cations2') reactions = REACTIONS_CATIONS_4_6;
+            else if (currentSection === 'unknown') {
+                if (salt.startsWith('anion_')) { reactions = REACTIONS_ANIONS; realSalt = salt.replace('anion_', ''); }
+                else if (salt.startsWith('cat1_')) { reactions = REACTIONS_CATIONS_1_3; realSalt = salt.replace('cat1_', ''); }
+                else if (salt.startsWith('cat2_')) { reactions = REACTIONS_CATIONS_4_6; realSalt = salt.replace('cat2_', ''); }
+            }
 
-function resetLab(){
-  salt=null; isRandom=false; hintIdx=0;
-  stopBubbles(); clearTimeout(fadeTimer);
-  setLiq(0,'transparent');
-  document.getElementById('pl').style.height='0';
-  document.getElementById('pl').style.background='transparent';
-  document.getElementById('fumes').classList.remove('show');
-  document.getElementById('crWrap').style.opacity='.28';
-  document.getElementById('crStrip').style.background='#f97316';
-  document.getElementById('finalBox').className='final-box';
-  document.getElementById('tlabel').textContent='الأنبوبة فارغة';
-  setObs('<span style="color:#94a3b8;">اختر ملحًا من القائمة بالأعلى لبدء التحليل...</span>');
-  ['hintBtn','guessBtn','revealBtn','clearBtn'].forEach(id=>document.getElementById(id).disabled=true);
-  document.querySelectorAll('.reag-btn').forEach(b=>b.classList.remove('used'));
-  document.querySelectorAll('.salt-btn').forEach(b=>b.classList.remove('active'));
-}
+            const labels = {
+                hcl: 'dilute HCl', h2so4: 'H₂SO₄ مركز', k2cr: 'Potassium chromate', fecl3: 'FeCl₃', mgso4: 'MgSO₄', bacl2: 'BaCl₂', pbac: 'خلات الرصاص',
+                nh4cloh: 'NH₄Cl + NH₄OH', nh4clohh2s: 'NH₄Cl + NH₄OH + H₂S', h2s: 'H₂S Soln', nh4oh: 'NH₄OH', naoh: 'NaOH', h2co3: '(NH₄)₂CO₃', nh4clohco3: 'NH₄Cl + NH₄OH + (NH₄)₂CO₃', cobalti: 'Sodium Cobalti nitrite'
+            };
 
-function log(msg,cls=''){
-  const lb=document.getElementById('logBox');
-  const d=document.createElement('div'); d.className='log-line';
-  const t=new Date(); const ts=`${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`;
-  d.innerHTML=`<span class="ts">[${ts}]</span> <span class="${cls}">${msg}</span>`;
-  lb.appendChild(d); lb.scrollTop=lb.scrollHeight;
-}
+            const btn = document.getElementById('r_' + rKey);
+            if (btn) btn.classList.add('used');
 
-window.addEventListener('load', ()=>{
-  updateSaltPanel();
-});
-</script>
+            if (!reactions[realSalt] || !reactions[realSalt][rKey]) {
+                addObs(`<strong style="color:#64748b;">← ${labels[rKey] || rKey}:</strong> ❌ <em style="color:#475569;">لم يحدث تفاعل</em>`);
+                log(`${labels[rKey] || rKey}: لم يحدث تفاعل`);
+                return;
+            }
 
-<footer style="text-align:center;padding:20px;color:#64748b;font-size:0.85rem;border-top:1px solid #1a1f2e;margin-top:40px;">
-  <p style="margin:5px 0;"><strong>Created by:</strong> <strong style="color:#93c5fd;">Eng. Omar Hamdy</strong></p>
-  <p style="margin:5px 0;"><strong style="color:#93c5fd;">Faculty of Engineering</strong> - Alexandria University</p>
-  <p style="margin:10px 0;color:#475569;">Chemistry Lab - Interactive Cation and Anion Detection Tests</p>
-</footer>
+            const rx = reactions[realSalt][rKey];
+            applyVisual(rx.visual, rKey);
+            addObs(`<strong style="color:#64748b;">← ${labels[rKey] || rKey}:</strong> ${rx.obs}`);
+            log(`${labels[rKey] || rKey}: ${rx.obs.replace(/<[^>]+>/g, '').substring(0, 55)}`);
+        }
+
+        function applyVisual(v, rKey) {
+            if (!v) return;
+            if (v.liq) setLiq(70, v.liq);
+            if (v.bubbles) startBubbles(v.bubbles);
+            if (v.fume) showFume(v.fume);
+            if (v.precip) addPrecip(v.precipH || 16, v.precip);
+            if (v.color) setLiq(70, v.color);
+            if (v.cr) {
+                document.getElementById('crWrap').style.opacity = '1';
+                document.getElementById('crStrip').style.background = v.cr;
+            }
+        }
+
+        function setLiq(h, color) { const t = document.getElementById('tl'); t.style.height = h + 'px'; t.style.background = color; }
+        function startBubbles(color) {
+            stopBubbles();
+            const cont = document.getElementById('bc');
+            bubbleTimer = setInterval(() => {
+                const b = document.createElement('div'); b.className = 'bubble';
+                const s = 2.5 + Math.random() * 3;
+                b.style.cssText = `width:${s}px;height:${s}px;left:${10 + Math.random() * 65}%;background:${color};animation-duration:${0.8 + Math.random() * 1.1}s;`;
+                cont.appendChild(b); setTimeout(() => b.remove(), 2200);
+            }, 130);
+            setTimeout(() => stopBubbles(), 3500);
+        }
+        function stopBubbles() { if (bubbleTimer) { clearInterval(bubbleTimer); bubbleTimer = null; } }
+        function showFume(color) { const f = document.getElementById('fumes'); f.querySelectorAll('.fume-puff').forEach(p => p.style.background = color); f.classList.add('show'); setTimeout(() => f.classList.remove('show'), 3200); }
+        function addPrecip(h, color) { const p = document.getElementById('pl'); p.style.height = h + 'px'; p.style.background = color; }
+
+        function addObs(html) {
+            const c = document.getElementById('obsContainer');
+            c.querySelector('.obs-text:not(.obs-entry)')?.remove();
+            const d = document.createElement('div'); d.className = 'obs-entry obs-text'; d.innerHTML = html;
+            c.appendChild(d); c.parentElement.scrollTop = c.parentElement.scrollHeight;
+        }
+        function setObs(html) { document.getElementById('obsContainer').innerHTML = `<div class="obs-text">${html}</div>`; }
+
+        function showHint() {
+            if (!salt) return;
+            let hints = {};
+            let realSalt = salt;
+            if (currentSection === 'anions') hints = HINTS_ANIONS;
+            else if (currentSection === 'cations1') hints = HINTS_CATIONS_1_3;
+            else if (currentSection === 'cations2') hints = HINTS_CATIONS_4_6;
+            else if (currentSection === 'unknown') {
+                if (salt.startsWith('anion_')) { hints = HINTS_ANIONS; realSalt = salt.replace('anion_', ''); }
+                else if (salt.startsWith('cat1_')) { hints = HINTS_CATIONS_1_3; realSalt = salt.replace('cat1_', ''); }
+                else if (salt.startsWith('cat2_')) { hints = HINTS_CATIONS_4_6; realSalt = salt.replace('cat2_', ''); }
+            }
+
+            if (!hints[realSalt]) return;
+            const h = hints[realSalt][hintIdx % hints[realSalt].length];
+            addObs(`💡 <em style="color:#4ade80;">${h}</em>`);
+            hintIdx++;
+        }
+
+        function revealAnswer() {
+            if (!salt) return;
+            let salts = {};
+            if (currentSection === 'anions') salts = ANIONS;
+            else if (currentSection === 'cations1') salts = CATIONS_1_3;
+            else if (currentSection === 'cations2') salts = CATIONS_4_6;
+            else if (currentSection === 'unknown') {
+                Object.keys(ANIONS).forEach(k => salts['anion_' + k] = ANIONS[k]);
+                Object.keys(CATIONS_1_3).forEach(k => salts['cat1_' + k] = CATIONS_1_3[k]);
+                Object.keys(CATIONS_4_6).forEach(k => salts['cat2_' + k] = CATIONS_4_6[k]);
+            }
+
+            const s = salts[salt];
+            const fi = document.getElementById('finalInner');
+            fi.className = 'final-inner ' + s.fiCls;
+            document.getElementById('fiIcon').textContent = s.icon;
+            document.getElementById('fiName').textContent = s.name;
+            document.getElementById('fiFormula').textContent = (s.anion || s.cation) + ' — ' + s.formula;
+            document.getElementById('fiEq').textContent = s.eq;
+            document.getElementById('finalBox').className = 'final-box show';
+            document.getElementById('tlabel').textContent = s.name;
+            log(`الإجابة: ${s.name} (${s.formula})`, 'good');
+        }
+
+        function openGuess() {
+            if (!salt) return;
+            let salts = {};
+            if (currentSection === 'anions') salts = ANIONS;
+            else if (currentSection === 'cations1') salts = CATIONS_1_3;
+            else if (currentSection === 'cations2') salts = CATIONS_4_6;
+            else if (currentSection === 'unknown') {
+                salts = {};
+                Object.keys(ANIONS).forEach(k => salts['anion_' + k] = ANIONS[k]);
+                Object.keys(CATIONS_1_3).forEach(k => salts['cat1_' + k] = CATIONS_1_3[k]);
+                Object.keys(CATIONS_4_6).forEach(k => salts['cat2_' + k] = CATIONS_4_6[k]);
+            }
+
+            const grid = document.getElementById('guessGrid');
+            grid.innerHTML = '';
+            document.getElementById('guessResult').innerHTML = '';
+            document.getElementById('modalTitle').textContent = '🔮 ما هو الأيون الموجود؟';
+
+            const keys = Object.keys(salts).sort(() => Math.random() - .5);
+            keys.forEach(k => {
+                const btn = document.createElement('button');
+                btn.className = 'guess-opt';
+                const ion = salts[k].anion || salts[k].cation;
+                btn.innerHTML = `${salts[k].icon} ${ion} <br><span style="opacity:.6;font-size:.75rem;">${salts[k].name}</span>`;
+                btn.onclick = () => checkGuess(k, btn, salts);
+                grid.appendChild(btn);
+            });
+            document.getElementById('overlay').classList.add('show');
+        }
+
+        function checkGuess(key, btn, salts) {
+            document.querySelectorAll('.guess-opt').forEach(b => b.style.pointerEvents = 'none');
+            const correct = (key === salt);
+            btn.className = 'guess-opt ' + (correct ? 'correct' : 'wrong');
+            if (!correct) {
+                const ion = salts[salt].anion || salts[salt].cation;
+                document.querySelectorAll('.guess-opt').forEach(b => {
+                    if (b.textContent.includes(ion) && b.textContent.includes(salts[salt].name)) b.className = 'guess-opt correct';
+                });
+            }
+
+            document.getElementById('guessResult').innerHTML = correct
+                ? '<span style="color:#4ade80;">✅ إجابة صحيحة! 🎉</span>'
+                : `<span style="color:#f87171;">❌ خطأ — الإجابة الصحيحة: ${salts[salt].anion || salts[salt].cation}</span>`;
+            log('تخمين: ' + (correct ? '✅ صحيح' : '❌ خطأ — ' + salts[salt].name));
+        }
+
+        function closeGuess(e) { if (e.target === document.getElementById('overlay')) closeGuessBtn(); }
+        function closeGuessBtn() { document.getElementById('overlay').classList.remove('show'); }
+
+        function clearTube() {
+            stopBubbles(); clearTimeout(fadeTimer);
+            setLiq(60, 'rgba(255, 255, 255, 0.3)');
+            document.getElementById('pl').style.height = '0';
+            document.getElementById('fumes').classList.remove('show');
+            document.getElementById('crWrap').style.opacity = '.28';
+            document.getElementById('crStrip').style.background = '#f97316';
+            document.getElementById('finalBox').className = 'final-box';
+            document.querySelectorAll('.reag-btn').forEach(b => b.classList.remove('used'));
+            setObs('✅ تم تنظيف الأنبوبة — يمكنك البدء من جديد.');
+            log('تنظيف الأنبوبة');
+        }
+
+        function resetLab() {
+            salt = null; isRandom = false; hintIdx = 0;
+            stopBubbles(); clearTimeout(fadeTimer);
+            setLiq(0, 'transparent');
+            document.getElementById('pl').style.height = '0';
+            document.getElementById('pl').style.background = 'transparent';
+            document.getElementById('fumes').classList.remove('show');
+            document.getElementById('crWrap').style.opacity = '.28';
+            document.getElementById('crStrip').style.background = '#f97316';
+            document.getElementById('finalBox').className = 'final-box';
+            document.getElementById('tlabel').textContent = 'الأنبوبة فارغة';
+            setObs('<span style="color:#94a3b8;">اختر ملحًا من القائمة بالأعلى لبدء التحليل...</span>');
+            ['hintBtn', 'guessBtn', 'revealBtn', 'clearBtn'].forEach(id => document.getElementById(id).disabled = true);
+            document.querySelectorAll('.reag-btn').forEach(b => b.classList.remove('used'));
+            document.querySelectorAll('.salt-btn').forEach(b => b.classList.remove('active'));
+        }
+
+        function log(msg, cls = '') {
+            const lb = document.getElementById('logBox');
+            const d = document.createElement('div'); d.className = 'log-line';
+            const t = new Date(); const ts = `${String(t.getHours()).padStart(2, '0')}:${String(t.getMinutes()).padStart(2, '0')}:${String(t.getSeconds()).padStart(2, '0')}`;
+            d.innerHTML = `<span class="ts">[${ts}]</span> <span class="${cls}">${msg}</span>`;
+            lb.appendChild(d); lb.scrollTop = lb.scrollHeight;
+        }
+
+        window.addEventListener('load', () => {
+            updateSaltPanel();
+        });
+    </script>
+
+    <footer
+        style="text-align:center;padding:20px;color:#64748b;font-size:0.85rem;border-top:1px solid #1a1f2e;margin-top:40px;">
+        <p style="margin:5px 0;"><strong>Created by:</strong> <strong style="color:#93c5fd;">Eng. Omar Hamdy</strong>
+        </p>
+        <p style="margin:5px 0;"><strong style="color:#93c5fd;">Faculty of Engineering</strong> - Alexandria University
+        </p>
+        <p style="margin:10px 0;color:#475569;">Chemistry Lab - Interactive Cation and Anion Detection Tests</p>
+    </footer>
 </body>
+
 </html>
