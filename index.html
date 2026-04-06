@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مختبر الكشف عن الشقوق</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#090b0f;--card:#0e1118;--border:#1a1f2e;--white:#e8edf5;--muted:#3d4a5c;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:'Cairo',sans-serif;color:var(--white);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 55% 45% at 15% 15%,#0d1f3a1a 0%,transparent 70%),radial-gradient(ellipse 45% 55% at 85% 85%,#1a0d2a14 0%,transparent 70%);pointer-events:none;z-index:0;}
+
+.header{text-align:center;padding:26px 16px 6px;position:relative;z-index:2;}
+.header h1{font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,#93c5fd,#c4b5fd,#86efac);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.header p{color:var(--muted);font-size:0.76rem;margin-top:3px;}
+
+/* SECTION SELECTOR */
+.section-selector{max-width:860px;margin:16px auto;padding:0 16px;position:relative;z-index:2;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.section-btn{background:#0e1118;border:1.5px solid #1a1f2e;border-radius:9px;padding:10px 18px;font-family:'Cairo',sans-serif;font-size:0.85rem;font-weight:700;color:#475569;cursor:pointer;transition:all .18s;flex:1;min-width:150px;}
+.section-btn:hover{border-color:#3b82f6;color:#93c5fd;background:#0c1420;}
+.section-btn.active{background:linear-gradient(135deg,#1b3760,#1a2442);border-color:#3b82f6;color:#93c5fd;box-shadow:0 0 12px #3b82f625;}
+
+/* SALT PANEL */
+.salt-panel{max-width:860px;margin:16px auto;padding:0 16px;position:relative;z-index:2;}
+.salt-panel h3{font-size:0.75rem;color:var(--muted);margin-bottom:9px;text-align:center;letter-spacing:.5px;}
+.salt-grid{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;}
+.salt-btn{background:#0e1118;border:1.5px solid #1a1f2e;border-radius:9px;padding:7px 15px;font-family:'Cairo',sans-serif;font-size:0.82rem;font-weight:700;color:#475569;cursor:pointer;transition:all .18s;}
+.salt-btn:hover{border-color:#3b82f6;color:#93c5fd;background:#0c1420;}
+.salt-btn.active{background:linear-gradient(135deg,#1b3760,#1a2442);border-color:#3b82f6;color:#93c5fd;box-shadow:0 0 12px #3b82f625;}
+.random-btn{border-color:#5b21b6!important;color:#c4b5fd!important;}
+.random-btn:hover{background:#130d24!important;border-color:#7c3aed!important;box-shadow:0 0 12px #7c3aed25!important;}
+.random-btn.active{background:linear-gradient(135deg,#2d1060,#1a0d42)!important;border-color:#7c3aed!important;color:#c4b5fd!important;box-shadow:0 0 14px #7c3aed30!important;}
+
+/* MAIN LAYOUT */
+.main-wrap{max-width:860px;margin:0 auto;padding:0 16px;position:relative;z-index:2;display:grid;grid-template-columns:1fr 280px;gap:14px;}
+@media(max-width:680px){.main-wrap{grid-template-columns:1fr;}}
+
+/* BENCH */
+.bench{background:linear-gradient(180deg,#0e1118 0%,#090b0f 100%);border:1px solid #1a1f2e;border-radius:18px;padding:20px 16px 18px;position:relative;}
+
+/* SCENE */
+.scene{display:flex;align-items:flex-end;justify-content:center;gap:28px;min-height:190px;margin-bottom:18px;flex-wrap:wrap;}
+.tube-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;}
+.tube-container{position:relative;width:68px;height:155px;}
+.tube-svg{width:100%;height:100%;}
+.tube-liquid{position:absolute;bottom:6px;left:9px;right:9px;border-radius:0 0 16px 16px;transition:background-color 1s ease,height .5s ease;overflow:hidden;}
+.tube-label{font-size:0.73rem;font-weight:700;color:#3d4a5c;text-align:center;max-width:90px;}
+.bubble-container{position:absolute;bottom:6px;left:9px;right:9px;height:calc(100% - 12px);overflow:hidden;pointer-events:none;border-radius:0 0 16px 16px;}
+.bubble{position:absolute;border-radius:50%;animation:rise linear infinite;opacity:0;}
+@keyframes rise{0%{bottom:0;opacity:.75;transform:scale(1);}80%{opacity:.4;}100%{bottom:100%;opacity:0;transform:scale(1.5);}}
+.precipitate{position:absolute;bottom:6px;left:9px;right:9px;border-radius:0 0 16px 16px;height:0;transition:height .8s ease,background .5s;overflow:hidden;}
+.fumes{position:absolute;top:-28px;left:50%;transform:translateX(-50%);pointer-events:none;opacity:0;transition:opacity .3s;display:flex;gap:3px;}
+.fumes.show{opacity:1;}
+.fume-puff{border-radius:50%;background:rgba(200,220,255,0.15);animation:puffUp 1.4s ease infinite;}
+@keyframes puffUp{0%{transform:scale(1) translateY(0);opacity:.7;}50%{transform:scale(1.3) translateY(-7px);opacity:.35;}100%{transform:scale(1.6) translateY(-14px);opacity:0;}}
+.fume-puff:nth-child(2){animation-delay:.25s;}
+.fume-puff:nth-child(3){animation-delay:.5s;}
+
+/* K2Cr */
+.cr-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;opacity:.28;transition:opacity .4s;}
+.cr-strip{width:14px;height:48px;border-radius:4px;background:#f97316;border:1px solid #7c3410;transition:background 1.2s ease;}
+.cr-label{font-size:0.62rem;font-weight:700;color:#475569;writing-mode:vertical-rl;}
+
+/* REAGENTS */
+.reagents-panel{background:#0e1118;border:1px solid #1a1f2e;border-radius:18px;padding:16px 14px;}
+.reagents-panel h4{font-size:0.72rem;font-weight:800;color:var(--muted);letter-spacing:.6px;margin-bottom:12px;text-align:center;}
+.reagent-grid{display:flex;flex-direction:column;gap:6px;}
+.reag-btn{background:#090b0f;border:1.5px solid #1a1f2e;border-radius:9px;padding:8px 12px;font-family:'Cairo',sans-serif;font-size:0.79rem;font-weight:700;color:#4a5568;cursor:pointer;transition:all .18s;text-align:right;display:flex;align-items:center;gap:8px;}
+.reag-btn:hover{border-color:#3b82f6;color:#93c5fd;background:#0a1220;}
+.reag-btn.used{opacity:.38;border-style:dashed;pointer-events:none;}
+.reag-icon{font-size:1rem;flex-shrink:0;}
+.reag-sep{height:1px;background:#1a1f2e;margin:3px 0;}
+
+/* OBS */
+.obs-wrap{max-width:860px;margin:14px auto 0;padding:0 16px;position:relative;z-index:2;}
+.obs-box{background:#0a0d14;border:1.5px dashed #1e2438;border-radius:13px;padding:14px 18px;min-height:60px;max-height:200px;overflow-y:auto;}
+.obs-title{font-size:0.67rem;font-weight:800;color:#2d3a4a;letter-spacing:.5px;margin-bottom:6px;}
+.obs-text{font-size:0.84rem;font-weight:600;line-height:1.75;color:#94a3b8;}
+.obs-entry{margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid #141825;animation:fadeSlide .4s ease;}
+.obs-entry:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+
+/* GUESS MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;display:none;align-items:center;justify-content:center;}
+.overlay.show{display:flex;}
+.modal{background:#0e1118;border:1px solid #1e2438;border-radius:18px;padding:26px 24px;max-width:420px;width:90%;animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
+.modal h3{font-size:1rem;font-weight:900;text-align:center;margin-bottom:18px;color:#c4b5fd;}
+.guess-grid{display:flex;flex-direction:column;gap:8px;}
+.guess-opt{background:#090b0f;border:1.5px solid #1a1f2e;border-radius:10px;padding:10px 16px;font-family:'Cairo',sans-serif;font-size:0.85rem;font-weight:700;color:#64748b;cursor:pointer;transition:all .18s;text-align:right;}
+.guess-opt:hover{border-color:#7c3aed;color:#c4b5fd;background:#130d24;}
+.guess-opt.correct{background:#0e2214;border-color:#22c55e;color:#86efac;pointer-events:none;}
+.guess-opt.wrong{background:#2e0e0e;border-color:#ef4444;color:#fca5a5;pointer-events:none;}
+.modal-close{display:block;margin:16px auto 0;background:transparent;border:1px solid #1a1f2e;border-radius:9px;padding:7px 22px;font-family:'Cairo',sans-serif;font-size:0.78rem;font-weight:700;color:#3d4a5c;cursor:pointer;transition:all .18s;}
+.modal-close:hover{border-color:#3d4a5c;color:#64748b;}
+.guess-result{text-align:center;font-size:0.9rem;font-weight:800;margin-top:12px;min-height:28px;}
+
+/* FINAL BOX */
+.final-box{max-width:860px;margin:12px auto;padding:0 16px;position:relative;z-index:2;display:none;}
+.final-box.show{display:block;}
+.final-inner{border-radius:14px;padding:18px 22px;text-align:center;border:2px solid;animation:fadeIn .5s ease;}
+.fi-co3{background:#0e2214;border-color:#22c55e;}
+.fi-hco3{background:#0c1a26;border-color:#38bdf8;}
+.fi-so3{background:#160d26;border-color:#a855f7;}
+.fi-s2o3{background:#1e0e05;border-color:#f97316;}
+.fi-cl{background:#1e1605;border-color:#eab308;}
+.fi-so4{background:#0c1320;border-color:#60a5fa;}
+.fi-po4{background:#160c0d;border-color:#f87171;}
+
+/* Cations Group 1-3 */
+.fi-pb{background:#1e1605;border-color:#eab308;}
+.fi-cu{background:#0c1320;border-color:#60a5fa;}
+.fi-cd{background:#1e1605;border-color:#eab308;}
+.fi-al{background:#0e2214;border-color:#22c55e;}
+.fi-fe2{background:#0c1a26;border-color:#38bdf8;}
+.fi-fe3{background:#160d26;border-color:#a855f7;}
+
+/* Cations Group 4-6 */
+.fi-ni{background:#0c1a26;border-color:#38bdf8;}
+.fi-mn{background:#160d26;border-color:#a855f7;}
+.fi-ba{background:#1e1605;border-color:#eab308;}
+.fi-ca{background:#0e2214;border-color:#22c55e;}
+.fi-k{background:#160d26;border-color:#a855f7;}
+.fi-na{background:#0c1320;border-color:#60a5fa;}
+
+.fi-icon{font-size:2.2rem;display:block;margin-bottom:6px;}
+.fi-name{font-size:1.2rem;font-weight:900;}
+.fi-formula{font-size:0.86rem;font-weight:700;opacity:.7;margin-top:3px;}
+.fi-eq{font-size:0.72rem;opacity:.45;margin-top:8px;font-family:'Space Mono',monospace;direction:ltr;}
+
+/* BOTTOM BAR */
+.bottom-bar{max-width:860px;margin:12px auto 8px;padding:0 16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;position:relative;z-index:2;}
+.bar-btn{background:transparent;border:1px solid #1a1f2e;border-radius:9px;padding:7px 18px;font-family:'Cairo',sans-serif;font-size:0.78rem;font-weight:700;color:#3d4a5c;cursor:pointer;transition:all .18s;}
+.bar-btn:hover:not(:disabled){border-color:#3d4a5c;color:#64748b;}
+.bar-btn:disabled{opacity:.3;cursor:not-allowed;}
+.hint-btn{border-color:#1e2d1a;color:#3d6b4a;}
+.hint-btn:hover:not(:disabled){border-color:#22c55e!important;color:#86efac!important;}
+.guess-btn{border-color:#2d1a5e;color:#7c4fd4;}
+.guess-btn:hover:not(:disabled){border-color:#7c3aed!important;color:#c4b5fd!important;}
+
+/* LOG */
+.log-wrap{max-width:860px;margin:0 auto 36px;padding:0 16px;position:relative;z-index:2;}
+.log-box{background:#060709;border:1px solid #131720;border-radius:10px;padding:10px 14px;font-family:'Space Mono',monospace;font-size:0.67rem;color:#2d3a4a;max-height:80px;overflow-y:auto;}
+.log-line{margin-bottom:3px;}
+.log-line .ts{color:#1e4d2e;}
+.log-line .good{color:#22c55e;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔬 مختبر الكشف عن الشقوق</h1>
+  <p>اختر نوع التحليل — الأنيونات أو الكاتيونات</p>
+</div>
+
+<!-- SECTION SELECTOR -->
+<div class="section-selector">
+  <button class="section-btn active" onclick="switchSection('anions')">🟢 الكشف عن الشقوق الحامضية (الأنيونات)</button>
+  <button class="section-btn" onclick="switchSection('cations1')">🔵 الكشف عن الشقوق القاعدية (مجموعة 1-3)</button>
+  <button class="section-btn" onclick="switchSection('cations2')">🟣 الكشف عن الشقوق القاعدية (مجموعة 4-6)</button>
+  <button class="section-btn" onclick="switchSection('unknown')">❓ ملح مجهول المجموعة</button>
+</div>
+
+<!-- SALT SELECTOR -->
+<div class="salt-panel" id="saltPanel">
+  <h3>⚗️ اختر ملحًا للتحليل:</h3>
+  <div class="salt-grid" id="saltGrid"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+  <div class="bench">
+    <div class="scene">
+      <div class="tube-wrap">
+        <div class="tube-container" id="tc">
+          <svg class="tube-svg" viewBox="0 0 68 155" fill="none">
+            <path d="M11 4L11 122Q11 149 34 149Q57 149 57 122L57 4Z" fill="#0e1118" stroke="#1e2436" stroke-width="1.8"/>
+            <rect x="7" y="2" width="54" height="8" rx="3" fill="#131720" stroke="#1e2436" stroke-width="1.2"/>
+            <path d="M16 10L16 126Q16 140 24 145" stroke="rgba(255,255,255,0.05)" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <div class="tube-liquid" id="tl" style="height:0;background:transparent;"></div>
+          <div class="bubble-container" id="bc"></div>
+          <div class="precipitate" id="pl"></div>
+          <div class="fumes" id="fumes">
+            <span class="fume-puff" style="width:16px;height:16px;"></span>
+            <span class="fume-puff" style="width:12px;height:12px;"></span>
+            <span class="fume-puff" style="width:14px;height:14px;"></span>
+          </div>
+        </div>
+        <div class="tube-label" id="tlabel">الأنبوبة فارغة</div>
+      </div>
+      <div class="cr-wrap" id="crWrap">
+        <div class="cr-strip" id="crStrip"></div>
+        <div class="cr-label">K₂Cr₂O₇</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reagents-panel">
+    <h4>🧫 الكواشف المتاحة</h4>
+    <div class="reagent-grid" id="reagentGrid"></div>
+  </div>
+</div>
+
+<!-- OBS -->
+<div class="obs-wrap">
+  <div class="obs-box">
+    <div class="obs-title">📋 الملاحظات</div>
+    <div id="obsContainer"><div class="obs-text" style="color:#2d3a4a;">اختر ملحًا للبدء...</div></div>
+  </div>
+</div>
+
+<!-- FINAL -->
+<div class="final-box" id="finalBox">
+  <div class="final-inner" id="finalInner">
+    <span class="fi-icon" id="fiIcon"></span>
+    <div class="fi-name" id="fiName"></div>
+    <div class="fi-formula" id="fiFormula"></div>
+    <div class="fi-eq" id="fiEq"></div>
+  </div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <button class="bar-btn hint-btn"  id="hintBtn"   onclick="showHint()"    disabled>💡 تلميح</button>
+  <button class="bar-btn guess-btn" id="guessBtn"  onclick="openGuess()"   disabled>🔮 خمّن الأيون</button>
+  <button class="bar-btn"           id="revealBtn" onclick="revealAnswer()" disabled>🔍 اكشف الإجابة</button>
+  <button class="bar-btn"           id="clearBtn"  onclick="clearTube()"   disabled>🧹 امسح الأنبوبة</button>
+  <button class="bar-btn"           onclick="resetLab()">🔄 ملح جديد</button>
+</div>
+
+<!-- LOG -->
+<div class="log-wrap">
+  <div class="log-box" id="logBox"><div class="log-line">// سجل التجربة</div></div>
+</div>
+
+<!-- GUESS MODAL -->
+<div class="overlay" id="overlay" onclick="closeGuess(event)">
+  <div class="modal" id="modal">
+    <h3 id="modalTitle">🔮 خمّن الأيون</h3>
+    <div class="guess-grid" id="guessGrid"></div>
+    <div class="guess-result" id="guessResult"></div>
+    <button class="modal-close" onclick="closeGuessBtn()">إغلاق</button>
+  </div>
+</div>
+
+<script>
+// ── ANIONS DATA (لم يتم تعديله) ──
+const ANIONS = {
+  co3:  {name:'كربونات الصوديوم',   formula:'Na₂CO₃',  anion:'CO₃²⁻', fiCls:'fi-co3', icon:'🟢', eq:'Na₂CO₃ + 2HCl → 2NaCl + H₂O + CO₂↑'},
+  hco3: {name:'بيكربونات الصوديوم',formula:'NaHCO₃',  anion:'HCO₃⁻', fiCls:'fi-hco3',icon:'🔵', eq:'NaHCO₃ + HCl → NaCl + H₂O + CO₂↑'},
+  so3:  {name:'كبريتيت الصوديوم',  formula:'Na₂SO₃',  anion:'SO₃²⁻', fiCls:'fi-so3', icon:'🟣', eq:'Na₂SO₃ + 2HCl → 2NaCl + H₂O + SO₂↑'},
+  s2o3: {name:'ثيوكبريتات الصوديوم',formula:'Na₂S₂O₃',anion:'S₂O₃²⁻',fiCls:'fi-s2o3',icon:'🟠', eq:'Na₂S₂O₃ + 2HCl → 2NaCl + H₂O + SO₂↑ + S↓'},
+  cl:   {name:'كلوريد الصوديوم',   formula:'NaCl',    anion:'Cl⁻',   fiCls:'fi-cl',  icon:'🟡', eq:'NaCl + H₂SO₄(مركز) → NaHSO₄ + HCl↑'},
+  so4:  {name:'كبريتات الصوديوم',  formula:'Na₂SO₄',  anion:'SO₄²⁻', fiCls:'fi-so4', icon:'🔵', eq:'Na₂SO₄ + BaCl₂ → BaSO₄↓ + 2NaCl'},
+  po4:  {name:'فوسفات الصوديوم',   formula:'Na₃PO₄',  anion:'PO₄³⁻', fiCls:'fi-po4', icon:'🔴', eq:'Na₃PO₄ + FeCl₃ → FePO₄↓ + 3NaCl'},
+};
+
+// ── CATIONS GROUP 1-3 DATA (من PDF فقط) ──
+const CATIONS_1_3 = {
+  pb:  {name:'نترات الرصاص',      formula:'Pb(NO₃)₂', cation:'Pb²⁺', fiCls:'fi-pb', icon:'🟡', eq:'Pb²⁺ + K₂CrO₄ → PbCrO₄↓ (أصفر)'},
+  cu:  {name:'كبريتات النحاس',     formula:'CuSO₄',   cation:'Cu²⁺', fiCls:'fi-cu', icon:'🔵', eq:'Cu²⁺ + H₂S → CuS↓ (أسود)'},
+  cd:  {name:'كلوريد الكادميوم',   formula:'CdCl₂',   cation:'Cd²⁺', fiCls:'fi-cd', icon:'🟡', eq:'Cd²⁺ + H₂S → CdS↓ (أصفر)'},
+  al:  {name:'كلوريد الألومنيوم',  formula:'AlCl₃',   cation:'Al³⁺', fiCls:'fi-al', icon:'⚪', eq:'Al³⁺ + NH₃ → Al(OH)₃↓ (أبيض جيلاتيني)'},
+  fe2: {name:'كبريتات الحديدوز',   formula:'FeSO₄',   cation:'Fe²⁺', fiCls:'fi-fe2', icon:'🟢', eq:'Fe²⁺ + NaOH → Fe(OH)₂↓ (أخضر متسخ)'},
+  fe3: {name:'كلوريد الحديديك',    formula:'FeCl₃',   cation:'Fe³⁺', fiCls:'fi-fe3', icon:'🟤', eq:'Fe³⁺ + NaOH → Fe(OH)₃↓ (بني محمر)'},
+};
+
+// ── CATIONS GROUP 4-6 DATA (من PDF فقط) ──
+const CATIONS_4_6 = {
+  ni:  {name:'كلوريد النيكل',      formula:'NiCl₂',   cation:'Ni²⁺', fiCls:'fi-ni', icon:'🟢', eq:'Ni²⁺ + NaOH → Ni(OH)₂↓ (أخضر)'},
+  mn:  {name:'كبريتات المنجنيز',   formula:'MnSO₄',   cation:'Mn²⁺', fiCls:'fi-mn', icon:'🟤', eq:'Mn²⁺ + NaOH → Mn(OH)₂↓ (بوف)'},
+  ba:  {name:'كلوريد الباريوم',    formula:'BaCl₂',   cation:'Ba²⁺', fiCls:'fi-ba', icon:'🟡', eq:'Ba²⁺ + K₂CrO₄ → BaCrO₄↓ (أصفر)'},
+  ca:  {name:'كلوريد الكالسيوم',   formula:'CaCl₂',   cation:'Ca²⁺', fiCls:'fi-ca', icon:'⚪', eq:'Ca²⁺ + (NH₄)₂CO₃ → CaCO₃↓ (أبيض)'},
+  k:   {name:'كلوريد البوتاسيوم',   formula:'KCl',     cation:'K⁺',  fiCls:'fi-k', icon:'🟣', eq:'K⁺ + NaCoB(NO₂)₄ → K₂CoB(NO₂)₆↓ (أصفر)'},
+  na:  {name:'كلوريد الصوديوم',    formula:'NaCl',    cation:'Na⁺', fiCls:'fi-na', icon:'🔵', eq:'Na⁺ + لا راسب مميز'},
+};
+
+// ── REACTIONS ANIONS (لم يتم تعديله) ──
+const REACTIONS_ANIONS = {
+  co3:{
+    hcl:  {obs:'🫧 <strong>فوران قوي!</strong> غاز عديم اللون عديم الرائحة <span style="color:#86efac;">(CO₂)</span>',visual:{bubbles:'rgba(200,255,200,0.4)',liq:'rgba(120,200,140,0.22)'}},
+    h2so4:{obs:'🫧 <strong>فوران</strong> — CO₂ عديم الرائحة',visual:{bubbles:'rgba(200,255,200,0.35)',liq:'rgba(120,200,140,0.18)'}},
+    k2cr: {obs:'❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇',visual:{}},
+    fecl3:{obs:'🟤 <strong>عكارة بنية خفيفة</strong>',visual:{liq:'rgba(160,90,40,0.2)',precip:'rgba(160,90,40,0.3)',precipH:6}},
+    mgso4:{obs:'⬜ <strong>راسب أبيض MgCO₃ فورًا على البارد!</strong>',visual:{precip:'rgba(230,240,255,0.8)',precipH:18}},
+    bacl2:{obs:'⬜ <strong>راسب أبيض BaCO₃</strong>',visual:{precip:'rgba(230,240,255,0.7)',precipH:14}},
+    pbac: {obs:'⬜ <strong>راسب أبيض PbCO₃</strong>',visual:{precip:'rgba(230,240,255,0.65)',precipH:11}},
+  },
+  hco3:{
+    hcl:  {obs:'🫧 <strong>فوران قوي!</strong> غاز عديم اللون عديم الرائحة <span style="color:#7dd3fc;">(CO₂)</span>',visual:{bubbles:'rgba(200,230,255,0.4)',liq:'rgba(100,180,230,0.22)'}},
+    h2so4:{obs:'🫧 <strong>فوران</strong> — CO₂ عديم الرائحة',visual:{bubbles:'rgba(200,230,255,0.35)',liq:'rgba(100,180,230,0.18)'}},
+    k2cr: {obs:'❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇',visual:{}},
+    fecl3:{obs:'🟡 <strong>لون بني فاتح</strong> — تأثير طفيف',visual:{liq:'rgba(180,130,40,0.18)'}},
+    mgso4:{obs:'❌ <strong>لا راسب على البارد</strong> — يحتاج تسخين للتأكيد (HCO₃⁻ وليس CO₃²⁻)',visual:{}},
+    bacl2:{obs:'❌ <strong>لا راسب</strong> — Ba(HCO₃)₂ قابل للذوبان',visual:{}},
+    pbac: {obs:'⬜ <strong>راسب أبيض خفيف</strong>',visual:{precip:'rgba(220,230,245,0.45)',precipH:6}},
+  },
+  so3:{
+    hcl:  {obs:'🫧 <strong>فوران بسيط</strong> — <span style="color:#d8b4fe;">(SO₂)</span> برائحة نفاذة — المحلول يبقى شفافًا',visual:{bubbles:'rgba(200,180,240,0.4)',liq:'rgba(160,130,220,0.22)',fume:'rgba(220,200,255,0.2)'}},
+    h2so4:{obs:'💨 <strong>فوران + أبخرة</strong> — SO₂ برائحة نفاذة',visual:{bubbles:'rgba(200,180,240,0.35)',liq:'rgba(160,130,220,0.18)',fume:'rgba(255,255,255,0.22)'}},
+    k2cr: {obs:'🟠→🟢 <strong>K₂Cr₂O₇ تحول إلى أخضر غامق</strong> (Cr⁶⁺ → Cr³⁺)',visual:{cr:'#166534'}},
+    fecl3:{obs:'🔴 <strong>بني محمر يظهر ثم يختفي تدريجيًا!</strong> (SO₃²⁻ يختزل Fe³⁺)',visual:{liq:'rgba(180,60,30,0.45)',fadeToLiq:'rgba(140,180,220,0.15)'}},
+    mgso4:{obs:'❌ <strong>لا راسب</strong> — MgSO₃ شبه ذائب',visual:{}},
+    bacl2:{obs:'⬜ <strong>راسب أبيض BaSO₃</strong>',visual:{precip:'rgba(230,240,255,0.7)',precipH:14}},
+    pbac: {obs:'⬜ <strong>راسب أبيض PbSO₃</strong>',visual:{precip:'rgba(230,240,255,0.6)',precipH:11}},
+  },
+  s2o3:{
+    hcl:  {obs:'🫧 <strong>فوران بسيط</strong> — SO₂ برائحة نفاذة + <span style="color:#fde047;">عكارة صفراء (كبريت حر S↓)</span>!',visual:{bubbles:'rgba(240,220,80,0.4)',liq:'rgba(200,180,60,0.3)',precip:'rgba(210,195,35,0.35)',precipH:7,fume:'rgba(220,200,255,0.2)'}},
+    h2so4:{obs:'🫧 <strong>فوران + عكارة صفراء</strong> — SO₂ + S↓',visual:{bubbles:'rgba(240,220,80,0.35)',liq:'rgba(200,180,60,0.25)',precip:'rgba(210,195,35,0.3)',precipH:6}},
+    k2cr: {obs:'🟠→🟡 <strong>K₂Cr₂O₇ تحول إلى أخضر مصفر</strong> (تأثير مختلف عن SO₃²⁻)',visual:{cr:'#a3e635'}},
+    fecl3:{obs:'🟣 <strong>لون بنفسجي!</strong> تكوين معقد [Fe(S₂O₃)]⁺',visual:{liq:'rgba(150,60,220,0.45)'}},
+    mgso4:{obs:'❌ <strong>لا راسب مميز</strong>',visual:{}},
+    bacl2:{obs:'⬜ <strong>راسب أبيض BaS₂O₃</strong>',visual:{precip:'rgba(230,240,255,0.65)',precipH:12}},
+    pbac: {obs:'⬜ <strong>راسب أبيض PbS₂O₃</strong>',visual:{precip:'rgba(230,240,255,0.6)',precipH:10}},
+  },
+  cl:{
+    hcl:  {obs:'❌ <strong>لا فوران ولا غاز</strong> — لا تفاعل مع HCl المخفف',visual:{}},
+    h2so4:{obs:'💨 <strong>أبخرة بيضاء حادة (HCl)!</strong> رائحة نفاذة جدًا',visual:{fume:'rgba(255,255,255,0.4)',liq:'rgba(180,200,220,0.15)'}},
+    k2cr: {obs:'❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇',visual:{}},
+    fecl3:{obs:'🟡 <strong>لون أصفر فاتح فقط</strong> — لون FeCl₃ الطبيعي بدون تفاعل',visual:{liq:'rgba(200,170,40,0.18)'}},
+    mgso4:{obs:'❌ <strong>لا راسب</strong>',visual:{}},
+    bacl2:{obs:'❌ <strong>لا راسب</strong> — BaCl₂ لا يرسّب Cl⁻',visual:{}},
+    pbac: {obs:'⬜ <strong>راسب أبيض PbCl₂!</strong> يذوب بالماء الساخن ويعود بالتبريد',visual:{precip:'rgba(235,242,255,0.8)',precipH:18}},
+  },
+  so4:{
+    hcl:  {obs:'❌ <strong>لا فوران ولا غاز</strong> — لا تفاعل',visual:{}},
+    h2so4:{obs:'❌ <strong>لا تفاعل مميز</strong>',visual:{}},
+    k2cr: {obs:'❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇',visual:{}},
+    fecl3:{obs:'🟡 <strong>لون أصفر فقط بلا راسب</strong> — لون FeCl₃ الطبيعي',visual:{liq:'rgba(200,170,40,0.22)'}},
+    mgso4:{obs:'❌ <strong>لا راسب</strong>',visual:{}},
+    bacl2:{obs:'⬜ <strong>راسب أبيض كثيف BaSO₄!</strong> لا يذوب في أي حمض — تأكيد قاطع',visual:{precip:'rgba(230,240,255,0.85)',precipH:22}},
+    pbac: {obs:'⬜ <strong>راسب أبيض PbSO₄</strong>',visual:{precip:'rgba(230,240,255,0.65)',precipH:13}},
+  },
+  po4:{
+    hcl:  {obs:'❌ <strong>لا فوران ولا غاز</strong> — لا تفاعل',visual:{}},
+    h2so4:{obs:'❌ <strong>لا تفاعل مميز</strong>',visual:{}},
+    k2cr: {obs:'❌ <strong>لا تغيير</strong> في لون K₂Cr₂O₇',visual:{}},
+    fecl3:{obs:'🟡 <strong>راسب أصفر FePO₄!</strong> تأكيد قاطع على الفوسفات',visual:{precip:'rgba(220,200,35,0.75)',precipH:20,liq:'rgba(200,180,35,0.28)'}},
+    mgso4:{obs:'⬜ <strong>راسب أبيض Mg₃(PO₄)₂</strong>',visual:{precip:'rgba(230,240,255,0.65)',precipH:12}},
+    bacl2:{obs:'⬜ <strong>راسب أبيض Ba₃(PO₄)₂</strong>',visual:{precip:'rgba(230,240,255,0.7)',precipH:14}},
+    pbac: {obs:'🟡 <strong>راسب أصفر فاتح Pb₃(PO₄)₂</strong>',visual:{precip:'rgba(220,220,160,0.6)',precipH:12}},
+  },
+};
+
+// ── REACTIONS CATIONS 1-3 (من PDF فقط) ──
+const REACTIONS_CATIONS_1_3 = {
+  pb:{
+    hcl:  {obs:'⬜ <strong>راسب أبيض PbCl₂</strong>',visual:{precip:'rgba(230,240,255,0.7)',precipH:14}},
+    nh4cloh:{obs:'❌ <strong>لا تفاعل</strong> مع NH₄Cl + NH₄OH (in excess)',visual:{}},
+    h2s:  {obs:'⬜ <strong>راسب أبيض Pb²⁺</strong>',visual:{precip:'rgba(230,240,255,0.7)',precipH:14}},
+    k2cr: {obs:'🟡 <strong>راسب أصفر PbCrO₄!</strong> تأكيد قاطع للرصاص',visual:{precip:'rgba(210,195,35,0.75)',precipH:18}},
+    naoh: {obs:'⬜ <strong>راسب أبيض Pb(OH)₂</strong>',visual:{precip:'rgba(230,240,255,0.7)',precipH:14}},
+  },
+  cu:{
+    hcl:  {obs:'❌ <strong>لا تفاعل</strong> مع dilute HCl',visual:{}},
+    nh4cloh:{obs:'❌ <strong>لا تفاعل</strong> مع NH₄Cl + NH₄OH (in excess)',visual:{}},
+    h2s:  {obs:'⬜ <strong>راسب أسود CuS!</strong> تأكيد قاطع للنحاس',visual:{precip:'rgba(30,30,30,0.85)',precipH:18}},
+    nh4oh:{obs:'🔵 <strong>راسب أزرق فاتح Cu(OH)₂!</strong> تأكيد قاطع',visual:{precip:'rgba(100,180,230,0.7)',precipH:14}},
+  },
+  cd:{
+    hcl:  {obs:'❌ <strong>لا تفاعل</strong> مع dilute HCl',visual:{}},
+    nh4cloh:{obs:'❌ <strong>لا تفاعل</strong> مع NH₄Cl + NH₄OH (in excess)',visual:{}},
+    h2s:  {obs:'🟡 <strong>راسب أصفر CdS!</strong> تأكيد قاطع للكادميوم',visual:{precip:'rgba(210,195,35,0.75)',precipH:16}},
+    acetic:{obs:'🟡 <strong>راسب أصفر CdS</strong> مع dilute acetic acid + H₂S',visual:{precip:'rgba(210,195,35,0.7)',precipH:14}},
+  },
+  al:{
+    hcl:  {obs:'❌ <strong>لا تفاعل</strong> مع dilute HCl',visual:{}},
+    nh4cloh:{obs:'⬜ <strong>راسب أبيض جيلاتيني Al(OH)₃!</strong> تأكيد قاطع مع NH₄Cl + NH₄OH (in excess)',visual:{precip:'rgba(230,240,255,0.8)',precipH:18}},
+  },
+  fe2:{
+    hcl:  {obs:'❌ <strong>لا تفاعل</strong> مع dilute HCl',visual:{}},
+    nh4cloh:{obs:'🟢 <strong>راسب أخضر متسخ Fe(OH)₂!</strong> تأكيد قاطع مع NH₄Cl + NH₄OH (in excess)',visual:{precip:'rgba(80,160,100,0.75)',precipH:16}},
+  },
+  fe3:{
+    hcl:  {obs:'❌ <strong>لا تفاعل</strong> مع dilute HCl',visual:{}},
+    nh4cloh:{obs:'🟤 <strong>راسب بني محمر Fe(OH)₃!</strong> تأكيد قاطع مع NH₄Cl + NH₄OH (in excess)',visual:{precip:'rgba(139,69,19,0.85)',precipH:18}},
+  },
+};
+
+// ── REACTIONS CATIONS 4-6 (من PDF فقط) ──
+const REACTIONS_CATIONS_4_6 = {
+  ni:{
+    nh4clohh2s:{obs:'🟤 <strong>راسب بني Ni(OH)₂!</strong> تأكيد قاطع للنيكل',visual:{precip:'rgba(100,140,80,0.75)',precipH:16}},
+    naoh: {obs:'🟢 <strong>راسب أخضر Ni(OH)₂!</strong> تأكيد قاطع',visual:{precip:'rgba(100,140,80,0.75)',precipH:16}},
+  },
+  mn:{
+    nh4clohh2s:{obs:'🟤 <strong>راسب بني Mn(OH)₂!</strong> تأكيد قاطع للمنغنيز',visual:{precip:'rgba(140,100,80,0.75)',precipH:16}},
+    naoh: {obs:'🟤 <strong>راسب بني Mn(OH)₂!</strong> تأكيد قاطع',visual:{precip:'rgba(140,100,80,0.75)',precipH:16}},
+  },
+  ba:{
+    k2cr: {obs:'🟡 <strong>راسب أصفر BaCrO₄!</strong> تأكيد قاطع للباريوم',visual:{precip:'rgba(210,195,35,0.75)',precipH:18}},
+    nh4clohco3:{obs:'⬜ <strong>راسب أبيض BaCO₃!</strong> تأكيد قاطع',visual:{precip:'rgba(230,240,255,0.7)',precipH:14}},
+  },
+  ca:{
+    k2cr: {obs:'🟡 <strong>لون المحلول أصفر خفيف جدا!</strong> بدون راسب واضح',visual:{color:'rgba(210,195,35,0.3)'}},
+    nh4clohco3:{obs:'⬜ <strong>راسب أبيض CaCO₃!</strong> تأكيد قاطع',visual:{precip:'rgba(230,240,255,0.7)',precipH:14}},
+  },
+  k:{
+    naoh: {obs:'❌ <strong>No ppt</strong>',visual:{}},
+    cobalti:{obs:'🟠 <strong>راسب أصفر أو برتقالي!</strong> تأكيد قاطع للبوتاسيوم',visual:{precip:'rgba(255,165,0,0.7)',precipH:8}},
+  },
+  na:{
+    naoh: {obs:'❌ <strong>No ppt</strong>',visual:{}},
+    cobalti:{obs:'🟠 <strong>لون المحلول أصفر أو برتقالي!</strong> بدون راسب',visual:{color:'rgba(255,165,0,0.6)'}},
+  },
+};
+
+const HINTS_ANIONS = {
+  co3: ['ابدأ بـ HCl المخفف — راقب نوع الغاز وقوة الفوران','جرّب MgSO₄ على البارد وقارن مع HCO₃⁻'],
+  hco3:['ابدأ بـ HCl المخفف — لاحظ الغاز ثم جرّب MgSO₄','لا راسب على البارد مع MgSO₄ — الفرق عن CO₃²⁻'],
+  so3: ['ابدأ بـ HCl — راقب الرائحة والمحلول (شفاف؟ عكر؟)','اختبر الغاز بـ K₂Cr₂O₇ ثم جرّب FeCl₃ على المحلول'],
+  s2o3:['ابدأ بـ HCl — راقب الرائحة ولون المحلول بعناية','اختبر K₂Cr₂O₇ وقارن لونه بـ SO₃²⁻ — ثم جرّب FeCl₃'],
+  cl:  ['HCl لا يعطي تفاعلًا — انتقل لـ H₂SO₄ المركز','جرّب خلات الرصاص أو BaCl₂ للتأكيد'],
+  so4: ['لا تفاعل مع HCl ولا H₂SO₄ — جرّب BaCl₂','أضف FeCl₃ للتفريق بين SO₄²⁻ و PO₄³⁻'],
+  po4: ['لا تفاعل مع HCl ولا H₂SO₄ — جرّب BaCl₂','أضف FeCl₃ — راسب أصفر = فوسفات'],
+};
+
+const HINTS_CATIONS_1_3 = {
+  pb: ['ابدأ بـ dilute HCl — لا تفاعل','جرّب K₂Cr₂O₇ — راسب أصفر = رصاص مؤكد'],
+  cu: ['ابدأ بـ dilute HCl — لا تفاعل','جرّب H₂S — راسب أسود = نحاس'],
+  cd: ['ابدأ بـ dilute HCl — لا تفاعل','جرّب H₂S — راسب أصفر = كادميوم'],
+  al: ['جرّب NH₄Cl + NH₂OH — راسب أبيض جيلاتيني','تأكيد قاطع للألومنيوم'],
+  fe2: ['جرّب NH₄Cl + NH₂OH — راسب أخضر متسخ','تأكيد قاطع للحديدوز'],
+  fe3: ['جرّب NH₄Cl + NH₂OH — راسب بني محمر','تأكيد قاطع للحديديك'],
+};
+
+const HINTS_CATIONS_4_6 = {
+  ni: ['جرّب NH₄Cl + NH₂OH + H₂S — راسب أسود','ثم جرّب NaOH — راسب أخضر = نيكل'],
+  mn: ['جرّب NH₄Cl + NH₂OH + H₂S — راسب بوف','ثم جرّب NaOH — راسب بوف = منجنيز'],
+  ba: ['جرّب NH₄Cl + NH₂OH + (NH₄)₂CO₃ — راسب أبيض','ثم جرّب K₂Cr₂O₇ — راسب أصفر = باريوم'],
+  ca: ['جرّب NH₄Cl + NH₂OH + (NH₄)₂CO₃ — راسب أبيض','ثم جرّب K₂Cr₂O₇ — لا راسب = كالسيوم'],
+  k: ['جرّب NH₄Cl + NH₂OH + (NH₄)₂CO₃ — لا راسب','ثم جرّب Sodium Cobalti nitrite — راسب أصفر برتقالي = بوتاسيوم'],
+  na: ['جرّب NH₄Cl + NH₂OH + (NH₄)₂CO₃ — لا راسب','ثم جرّب Sodium Cobalti nitrite — لا راسب = صوديوم'],
+};
+
+// ── STATE ──
+let currentSection='anions', salt=null, isRandom=false, hintIdx=0, bubbleTimer=null, fadeTimer=null;
+
+// ── SECTION SWITCHING ──
+function switchSection(section) {
+  currentSection=section;
+  resetLab();
+  document.querySelectorAll('.section-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  updateSaltPanel();
+}
+
+// ── UPDATE SALT PANEL ──
+function updateSaltPanel() {
+  const grid=document.getElementById('saltGrid');
+  grid.innerHTML='';
+  let salts={}, title='', reagents=[];
+  
+  if(currentSection==='anions') {
+    salts=ANIONS;
+    title='⚗️ اختر ملحًا للتحليل (أنيون):';
+    reagents=['hcl','h2so4','k2cr','fecl3','mgso4','bacl2','pbac'];
+  } else if(currentSection==='cations1') {
+    salts=CATIONS_1_3;
+    title='⚗️ اختر ملحًا للتحليل (كاتيون مجموعة 1-3):';
+    reagents=['hcl','nh4cloh','h2s','k2cr','nh4oh','naoh','acetic'];
+  } else if(currentSection==='cations2') {
+    salts=CATIONS_4_6;
+    title='⚗️ اختر ملحًا للتحليل (كاتيون مجموعة 4-6):';
+    reagents=['nh4clohh2s','naoh','k2cr','nh4clohco3','cobalti'];
+  } else if(currentSection==='unknown') {
+    const allSalts={...ANIONS,...CATIONS_1_3,...CATIONS_4_6};
+    salts=allSalts;
+    title='⚗️ اختر ملحًا مجهولًا للتحليل:';
+    reagents=['hcl','h2so4','k2cr','fecl3','mgso4','bacl2','pbac','nh4cloh','h2s','nh4oh','naoh','acetic','h2co3','cobalti'];
+  }
+  
+  document.querySelector('.salt-panel h3').textContent=title;
+  Object.keys(salts).forEach(k=>{
+    const btn=document.createElement('button');
+    btn.className='salt-btn';
+    btn.textContent=salts[k].formula;
+    btn.onclick=()=>selectSalt(k,false);
+    grid.appendChild(btn);
+  });
+  
+  const randomBtn=document.createElement('button');
+  randomBtn.className='salt-btn random-btn';
+  randomBtn.textContent='🎲 تحدي عشوائي';
+  randomBtn.onclick=()=>selectSalt('random',true);
+  grid.appendChild(randomBtn);
+  
+  updateReagentPanel(reagents);
+}
+
+// ── UPDATE REAGENT PANEL ──
+function updateReagentPanel(reagents) {
+  const grid=document.getElementById('reagentGrid');
+  grid.innerHTML='';
+  
+  const reagentLabels={
+    hcl:'dilute HCl',h2so4:'H₂SO₄ مركز',k2cr:'Potassium chromate',fecl3:'FeCl₃',mgso4:'MgSO₄',bacl2:'BaCl₂',pbac:'خلات الرصاص',
+    nh4cloh:'NH₄Cl + NH₄OH (in excess)',nh4clohh2s:'NH₄Cl + NH₄OH (in excess) + H₂S',h2s:'H₂S Soln',nh4oh:'NH₄OH',naoh:'NaOH',acetic:'dilute acetic acid + H₂S',h2co3:'(NH₄)₂CO₃',nh4clohco3:'NH₄Cl + NH₄OH (in excess) + (NH₄)₂CO₃',cobalti:'Sodium Cobalti nitrite'
+  };
+  
+  reagents.forEach(r=>{
+    const btn=document.createElement('button');
+    btn.className='reag-btn';
+    btn.id='r_'+r;
+    // btn.disabled=false; // الكواشف متاحة دائماً
+    btn.innerHTML=`<span class="reag-icon">💧</span>${reagentLabels[r]||r}`;
+    btn.onclick=()=>addReagent(r);
+    grid.appendChild(btn);
+  });
+}
+
+// ── INIT ──
+function selectSalt(key, random) {
+  resetLab();
+  let salts={};
+  
+  if(currentSection==='anions') salts=ANIONS;
+  else if(currentSection==='cations1') salts=CATIONS_1_3;
+  else if(currentSection==='cations2') salts=CATIONS_4_6;
+  else if(currentSection==='unknown') salts={...CATIONS_1_3,...CATIONS_4_6};
+  
+  if (key==='random') {
+    const keys=Object.keys(salts);
+    key=keys[Math.floor(Math.random()*keys.length)];
+    isRandom=true;
+    document.querySelectorAll('.salt-btn').forEach(b=>{
+      if(b.textContent.includes('🎲')) b.classList.add('active');
+    });
+  } else {
+    isRandom=false;
+    document.querySelectorAll('.salt-btn').forEach(b=>{
+      if(b.textContent===salts[key].formula) b.classList.add('active');
+    });
+  }
+  
+  salt=key;
+  setLiq(55,'rgba(190,205,225,0.16)');
+  const label = isRandom ? '؟ ملح مجهول' : salts[key].formula;
+  document.getElementById('tlabel').textContent = label;
+  
+  let obsText='';
+  if(currentSection==='anions') {
+    obsText=isRandom
+      ? '<span style="color:#3d4a5c;">✅ ملح مجهول في الماء — جرّب الكواشف واستنتج الأنيون.</span>'
+      : `<span style="color:#3d4a5c;">✅ تم إذابة <strong style="color:#64748b;">${salts[key].formula}</strong> في الماء — جرّب الكواشف.</span>`;
+  } else if(currentSection==='cations1' || currentSection==='cations2') {
+    obsText=isRandom
+      ? '<span style="color:#3d4a5c;">✅ ملح مجهول في الماء — جرّب الكواشف واستنتج الكاتيون.</span>'
+      : `<span style="color:#3d4a5c;">✅ تم إذابة <strong style="color:#64748b;">${salts[key].formula}</strong> في الماء — جرّب الكواشف.</span>`;
+  } else if(currentSection==='unknown') {
+    obsText=isRandom
+      ? '<span style="color:#3d4a5c;">✅ ملح مجهول المجموعة في الماء — جرّب الكواشف واستنتج الكاتيون والمجموعة.</span>'
+      : `<span style="color:#3d4a5c;">✅ تم إذابة <strong style="color:#64748b;">${salts[key].formula}</strong> في الماء — جرّب الكواشف.</span>`;
+  }
+  
+  setObs(obsText);
+  document.getElementById('hintBtn').disabled=false;
+  document.getElementById('guessBtn').disabled=false;
+  document.getElementById('revealBtn').disabled=false;
+  document.getElementById('clearBtn').disabled=false;
+}
+
+// ── ADD REAGENT ──
+function addReagent(rKey) {
+  if(!salt) return;
+  
+  let reactions={};
+  if(currentSection==='anions') reactions=REACTIONS_ANIONS;
+  else if(currentSection==='cations1') reactions=REACTIONS_CATIONS_1_3;
+  else if(currentSection==='cations2') reactions=REACTIONS_CATIONS_4_6;
+  else if(currentSection==='unknown') {
+    if(ANIONS[salt]) reactions=REACTIONS_ANIONS;
+    else if(CATIONS_1_3[salt]) reactions=REACTIONS_CATIONS_1_3;
+    else if(CATIONS_4_6[salt]) reactions=REACTIONS_CATIONS_4_6;
+  }
+  
+  if(!reactions[salt] || !reactions[salt][rKey]) {
+    const labels={
+      hcl:'dilute HCl',h2so4:'H2SO4 مركز',k2cr:'Potassium chromate',fecl3:'FeCl3',mgso4:'MgSO4',bacl2:'BaCl2',pbac:'خلات الرصاص',
+      nh4cloh:'NH4Cl + NH4OH (in excess)',h2s:'H2S Soln',nh4oh:'NH4OH',naoh:'NaOH',acetic:'dilute acetic acid + H2S',h2co3:'(NH4)2CO3',cobalti:'Sodium Cobalti nitrite'
+    };
+    const btn=document.getElementById('r_'+rKey);
+    if(btn) btn.classList.add('used');
+    addObs(`<strong style="color:#4a5568;">← ${labels[rKey]||rKey}:</strong> ❌ <em style="color:#94a3b8;">لم يحدث تفاعل</em>`);
+    log(`${labels[rKey]||rKey}: لم يحدث تفاعل`);
+    return;
+  }
+  
+  const rx=reactions[salt][rKey];
+  const labels={
+    hcl:'dilute HCl',h2so4:'H₂SO₄ مركز',k2cr:'Potassium chromate',fecl3:'FeCl₃',mgso4:'MgSO₄',bacl2:'BaCl₂',pbac:'خلات الرصاص',
+    nh4cloh:'NH₄Cl + NH₄OH (in excess)',nh4clohh2s:'NH₄Cl + NH₄OH (in excess) + H₂S',h2s:'H₂S Soln',nh4oh:'NH₄OH',naoh:'NaOH',acetic:'dilute acetic acid + H₂S',h2co3:'(NH₄)₂CO₃',nh4clohco3:'NH₄Cl + NH₄OH (in excess) + (NH₄)₂CO₃',cobalti:'Sodium Cobalti nitrite'
+  };
+  
+  const btn=document.getElementById('r_'+rKey);
+    if(btn) btn.classList.add('used');
+  applyVisual(rx.visual, rKey);
+  addObs(`<strong style="color:#4a5568;">← ${labels[rKey]||rKey}:</strong> ${rx.obs}`);
+  log(`${labels[rKey]||rKey}: ${rx.obs.replace(/<[^>]+>/g,'').substring(0,55)}`);
+}
+
+// ── APPLY VISUAL ──
+function applyVisual(v, rKey) {
+  if(!v) return;
+  if(v.liq) setLiq(65,v.liq);
+  if(v.bubbles) startBubbles(v.bubbles);
+  if(v.fume) showFume(v.fume);
+  if(v.precip) addPrecip(v.precipH||14, v.precip);
+  if(v.color) setLiq(65,v.color);
+  if(v.cr){ document.getElementById('crWrap').style.opacity='1'; document.getElementById('crStrip').style.background=v.cr; }
+  if(rKey==='fecl3' && salt==='so3' && v.fadeToLiq){
+    clearTimeout(fadeTimer);
+    fadeTimer=setTimeout(()=>setLiq(65,v.fadeToLiq),1500);
+  }
+}
+
+// ── VISUAL HELPERS ──
+function setLiq(h,color){ const t=document.getElementById('tl'); t.style.height=h+'px'; t.style.background=color; }
+function startBubbles(color,n=9){
+  stopBubbles();
+  const cont=document.getElementById('bc');
+  bubbleTimer=setInterval(()=>{
+    const b=document.createElement('div'); b.className='bubble';
+    const s=2.5+Math.random()*3;
+    b.style.cssText=`width:${s}px;height:${s}px;left:${10+Math.random()*65}%;background:${color};animation-duration:${0.8+Math.random()*1.1}s;`;
+    cont.appendChild(b); setTimeout(()=>b.remove(),2200);
+  },130);
+  setTimeout(()=>stopBubbles(),3500);
+}
+function stopBubbles(){ if(bubbleTimer){clearInterval(bubbleTimer);bubbleTimer=null;} }
+function showFume(color){ const f=document.getElementById('fumes'); f.querySelectorAll('.fume-puff').forEach(p=>p.style.background=color); f.classList.add('show'); setTimeout(()=>f.classList.remove('show'),3200); }
+function addPrecip(h,color){ const p=document.getElementById('pl'); p.style.height=h+'px'; p.style.background=color; }
+
+// ── OBS ──
+function addObs(html){
+  const c=document.getElementById('obsContainer');
+  c.querySelector('.obs-text:not(.obs-entry)')?.remove();
+  const d=document.createElement('div'); d.className='obs-entry obs-text'; d.innerHTML=html;
+  c.appendChild(d); c.parentElement.scrollTop=c.parentElement.scrollHeight;
+}
+function setObs(html){ document.getElementById('obsContainer').innerHTML=`<div class="obs-text">${html}</div>`; }
+
+// ── HINT ──
+function showHint(){
+  if(!salt) return;
+  let hints={};
+  if(currentSection==='anions') hints=HINTS_ANIONS;
+  else if(currentSection==='cations1') hints=HINTS_CATIONS_1_3;
+  else if(currentSection==='cations2') hints=HINTS_CATIONS_4_6;
+  else if(currentSection==='unknown') {
+    if(ANIONS[salt]) hints=HINTS_ANIONS;
+    else if(CATIONS_1_3[salt]) hints=HINTS_CATIONS_1_3;
+    else if(CATIONS_4_6[salt]) hints=HINTS_CATIONS_4_6;
+  }
+  
+  if(!hints[salt]) return;
+  const h=hints[salt][hintIdx%hints[salt].length];
+  addObs(`💡 <em style="color:#86efac;">${h}</em>`);
+  hintIdx++;
+}
+
+// ── REVEAL ──
+function revealAnswer(){
+  if(!salt) return;
+  let salts={};
+  if(currentSection==='anions') salts=ANIONS;
+  else if(currentSection==='cations1') salts=CATIONS_1_3;
+  else if(currentSection==='cations2') salts=CATIONS_4_6;
+  else if(currentSection==='unknown') salts={...CATIONS_1_3,...CATIONS_4_6};
+  
+  const s=salts[salt];
+  const fi=document.getElementById('finalInner');
+  fi.className='final-inner '+s.fiCls;
+  document.getElementById('fiIcon').textContent=s.icon;
+  document.getElementById('fiName').textContent=s.name;
+  
+  if(currentSection==='anions') {
+    document.getElementById('fiFormula').textContent=s.anion+' — '+s.formula;
+  } else {
+    document.getElementById('fiFormula').textContent=s.cation+' — '+s.formula;
+  }
+  
+  document.getElementById('fiEq').textContent=s.eq;
+  document.getElementById('finalBox').className='final-box show';
+  document.getElementById('tlabel').textContent=s.name;
+  log(`الإجابة: ${s.name} (${s.formula})`,'good');
+}
+
+// ── GUESS MODAL ──
+function openGuess(){
+  if(!salt) return;
+  let salts={};
+  if(currentSection==='anions') salts=ANIONS;
+  else if(currentSection==='cations1') salts=CATIONS_1_3;
+  else if(currentSection==='cations2') salts=CATIONS_4_6;
+  else if(currentSection==='unknown') salts={...ANIONS,...CATIONS_1_3,...CATIONS_4_6};
+  
+  const grid=document.getElementById('guessGrid');
+  grid.innerHTML='';
+  document.getElementById('guessResult').innerHTML='';
+  
+  let modalTitle='';
+  if(currentSection==='anions') modalTitle='🔮 خمّن الأيون — ما هو الأنيون؟';
+  else if(currentSection==='cations1' || currentSection==='cations2') modalTitle='🔮 خمّن الكاتيون — ما هو الكاتيون؟';
+  else if(currentSection==='unknown') modalTitle='🔮 خمّن الملح — ما هو الملح المجهول (أنيون أو كاتيون)؟';
+  
+  document.getElementById('modalTitle').textContent=modalTitle;
+  
+  const keys=Object.keys(salts).sort(()=>Math.random()-.5);
+  keys.forEach(k=>{
+    const btn=document.createElement('button');
+    btn.className='guess-opt';
+    const ion=currentSection==='anions'?salts[k].anion:salts[k].cation;
+    btn.innerHTML=`${salts[k].icon} ${ion} — <span style="opacity:.6;font-size:.8em;">${salts[k].name}</span>`;
+    btn.onclick=()=>checkGuess(k,btn,salts);
+    grid.appendChild(btn);
+  });
+  document.getElementById('overlay').classList.add('show');
+}
+
+function checkGuess(key, btn, salts){
+  document.querySelectorAll('.guess-opt').forEach(b=>b.style.pointerEvents='none');
+  const correct=(key===salt);
+  btn.className='guess-opt '+(correct?'correct':'wrong');
+  if(!correct){
+    const ion=currentSection==='anions'?salts[salt].anion:salts[salt].cation;
+    document.querySelectorAll('.guess-opt').forEach(b=>{
+      if(b.textContent.includes(ion)) b.className='guess-opt correct';
+    });
+  }
+  
+  const ionType=currentSection==='anions'?'الأيون':'الكاتيون';
+  document.getElementById('guessResult').innerHTML=correct
+    ? '<span style="color:#86efac;">✅ إجابة صحيحة! 🎉</span>'
+    : `<span style="color:#fca5a5;">❌ غلط — الإجابة الصحيحة: ${salts[salt][currentSection==='anions'?'anion':'cation']}</span>`;
+  log('تخمين: '+(correct?'✅ صحيح':'❌ خطأ — '+salts[salt].name));
+}
+
+function closeGuess(e){ if(e.target===document.getElementById('overlay')) closeGuessBtn(); }
+function closeGuessBtn(){ document.getElementById('overlay').classList.remove('show'); }
+
+// ── CLEAR / RESET ──
+function clearTube(){
+  stopBubbles(); clearTimeout(fadeTimer);
+  setLiq(55,'rgba(190,205,225,0.16)');
+  document.getElementById('pl').style.height='0';
+  document.getElementById('fumes').classList.remove('show');
+  document.getElementById('crWrap').style.opacity='.28';
+  document.getElementById('crStrip').style.background='#f97316';
+  document.getElementById('finalBox').className='final-box';
+  document.querySelectorAll('.reag-btn').forEach(b=>b.classList.remove('used'));
+  setObs('✅ تم مسح الأنبوبة — أعد التجريب.');
+  log('مسح الأنبوبة');
+}
+
+function resetLab(){
+  salt=null; isRandom=false; hintIdx=0;
+  stopBubbles(); clearTimeout(fadeTimer);
+  setLiq(0,'transparent');
+  document.getElementById('pl').style.height='0';
+  document.getElementById('pl').style.background='transparent';
+  document.getElementById('fumes').classList.remove('show');
+  document.getElementById('crWrap').style.opacity='.28';
+  document.getElementById('crStrip').style.background='#f97316';
+  document.getElementById('finalBox').className='final-box';
+  document.getElementById('tlabel').textContent='الأنبوبة فارغة';
+  setObs('<span style="color:#2d3a4a;">اختر ملحًا للبدء...</span>');
+  ['hintBtn','guessBtn','revealBtn','clearBtn'].forEach(id=>document.getElementById(id).disabled=true);
+  document.querySelectorAll('.reag-btn').forEach(b=>b.classList.remove('used'));
+  document.querySelectorAll('.salt-btn').forEach(b=>b.classList.remove('active'));
+}
+
+function enableReagents(on){ document.querySelectorAll('.reag-btn').forEach(b=>b.disabled=false); document.querySelectorAll('.reag-btn').forEach(b=>b.disabled=false); }
+
+function log(msg,cls=''){
+  const lb=document.getElementById('logBox');
+  const d=document.createElement('div'); d.className='log-line';
+  const t=new Date(); const ts=`${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`;
+  d.innerHTML=`<span class="ts">[${ts}]</span> <span class="${cls}">${msg}</span>`;
+  lb.appendChild(d); lb.scrollTop=lb.scrollHeight;
+}
+
+// ── INIT ON LOAD ──
+window.addEventListener('load', ()=>{
+  updateSaltPanel();
+});
+</script>
+</body>
+</html>
